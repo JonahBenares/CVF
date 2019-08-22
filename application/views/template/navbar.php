@@ -14,7 +14,7 @@
 
             <ul class="nav">
                 <li class="">
-                    <a href="<?php echo base_url(); ?>index.php/masterfile/dashboard">
+                    <a href="<?php echo base_url(); ?>index.php/masterfile/index">
                         <i class="ti-panel"></i>
                         <p>Dashboard</p>
                     </a>
@@ -39,46 +39,4 @@
                 </li>
             </ul>
     	</div>
-    </div>
-
-    <div class="main-panel">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar bar1"></span>
-                        <span class="icon-bar bar2"></span>
-                        <span class="icon-bar bar3"></span>
-                    </button>
-                    <a href="javascript:history.go(-1)" class="btn btn-success btn-md p-l-100 p-r-100"><span class="ti-arrow-left"></span> Back</a>            
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="ti-panel"></i>
-								<p>Stats</p>
-                            </a>
-                        </li>
-                        <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="ti-settings"></i>
-									<p>Settings</p>
-									<b class="caret"></b>
-                              </a>
-                              <ul class="dropdown-menu">
-                                <li><a href="#">Logout</a></li>
-                              </ul>
-                        </li>
-						<!-- <li>
-                            <a href="#">
-								<i class="ti-settings"></i>
-								<p>Settings</p>
-                            </a>
-                        </li> -->
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
+    </div>    

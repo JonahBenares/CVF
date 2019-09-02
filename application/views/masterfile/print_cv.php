@@ -126,6 +126,13 @@
 	    .nomarg{
 	    	margin: 0px;
 	    }
+
+        .blue{
+            background-image: url('<?php echo base_url(); ?>assets/img/png.png')!important;
+            background-repeat:no-repeat!important;
+            /*background-size: contain!important;*/
+            background-position: center center!important;
+        }
 	    
     </style>    
 
@@ -138,12 +145,69 @@
 						<a  onclick="printPage()" class="btn btn-warning btn-md p-l-50 p-r-50"><span class="ti-printer"></span> Print</a>		
 						<input type='submit' class="btn btn-primary btn-md p-l-100 p-r-100" value="Save"> 	
 					</div>
-
-					<!-- <h4 class="text-white"> <b>INCOMING</b> RFQ</h4>
-					<p class="text-white">Instructions: When printing REQUEST FOR QUOTATION make sure the following options are set correctly -- <u>Browser</u>: Chrome, <u>Layout</u>: Portrait, <u>Paper Size</u>: A4, <u>Margin</u> : Default, <u>Scale</u>: 100</p> -->
 				</center>
 			</div>
 			<br>
+            <div class="blue">
+                <table class="table table-s" style="margin-bottom: 0px;border-bottom: 2px solid #000">
+                    <tr>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                        <td width="5%" style="border: 0px!important"></td>
+                    </tr>
+                    <tr>
+                        <td class="" colspan="4" align="center" rowspan="3"><div style="width:100%;padding: 20px;border:1px solid #000">LOGO</div> </td>
+                        <td colspan="3" class=""></td>
+                        <td colspan="13" class=""> Company Name</td>  
+                    </tr>  
+                    <tr>
+                        <td colspan="3"></td>
+                        <td colspan="13"> Address</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td colspan="13"> TIN/TEL. NO</td>
+                    </tr>  
+                    <tr>
+                        <td colspan="17"></td>
+                        <td colspan="3">2/21/2019</td>
+                    </tr>   
+                    <tr><td colspan="20"><br></td></tr>      
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="15">POWER ONE CORP</td>
+                        <td colspan="3">**500,000.00</td>
+                    </tr>   
+                    <tr>
+                        <td colspan="1"></td>
+                        <td colspan="16">Five Hundred Thousand and 00/100*********************************************************</td>
+                        <td colspan="3"></td>
+                    </tr>     
+                    <tr><td colspan="20"><br><br><br><br><br><br></td></tr>              
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="15">Payment of Advances to POC( direct deposit fr CEN</td>
+                        <td colspan="3"></td>
+                    </tr>              
+                </table>
+            </div>
 	    	<div style="background: #fff; border:0px solid #000" >
 	    		<table class="table" >
                     <tr>
@@ -167,6 +231,9 @@
                         <td width="5%" style="border: 0px!important"></td>
                         <td width="5%" style="border: 0px!important"></td>
                         <td width="5%" style="border: 0px!important"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="20" class="no-bord"><p></p></td>
                     </tr>
                     <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
@@ -308,7 +375,7 @@
                     	<td colspan="20" align="center"><b class="text-blue">DUPLICATE COPY</b></td>
                     </tr>
                     <tr>
-                    	<td class="bor-right bor-left bor-bottom bor-top" colspan="4" align="center" rowspan="3">LOGO</td>
+                    	<td class="" colspan="4" align="center" rowspan="3"><div style="width:100%;padding: 15px;border:1px solid #000">LOGO</div></td>
                     	<td colspan="1" class=""></td>
                     	<td colspan="15" class=""> Company Name</td>  
                     </tr>  

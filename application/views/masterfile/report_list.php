@@ -8,12 +8,12 @@
                     </button>
                 </h5>                                        
             </div>
-            <form>
+            <form method='POST' action='upload_excel' enctype="multipart/form-data">
                 <div class="modal-body">
-                    <input type="file" class="form-control" name="">
+                    <input type="file" class="form-control" name="csv">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-block">Save</button>
+                    <button type="submit" class="btn btn-primary btn-block">Save</button>
                 </div>
             </form>
         </div>

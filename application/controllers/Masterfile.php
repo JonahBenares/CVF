@@ -50,14 +50,68 @@ class Masterfile extends CI_Controller {
 
 	}
 
-	public function report_list()
-	{
+	public function report_list(){
 		$this->load->view('template/header');
 		$this->load->view('template/navbar');
 		$this->load->view('masterfile/report_list');
 		$this->load->view('template/footer');
-
 	}
+
+	public function upload_excel(){
+         $dest= realpath(APPPATH . '../uploads/excel/');
+         $error_ext=0;
+        if(!empty($_FILES['csv']['name'])){
+             $exc= basename($_FILES['csv']['name']);
+             $exc=explode('.',$exc);
+             $ext1=$exc[1];
+            if($ext1=='php' || $ext1!='xlsx'){
+                $error_ext++;
+            } 
+            else {
+                 $filename1='Quickbooks.'.$ext1;
+                if(move_uploaded_file($_FILES["csv"]['tmp_name'], $dest.'/'.$filename1)){
+                    $this->readExcel_quickbooks();
+                }   
+            }
+        }
+    }
+
+    public function readExcel_quickbooks(){
+        require_once(APPPATH.'../assets/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        $inputFileName =realpath(APPPATH.'../uploads/excel/Quickbooks.xlsx');
+        try {
+            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load($inputFileName);
+        } catch(Exception $e) {
+            die('Error loading file"'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
+        }
+
+        $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow(); 
+        //$cv_date = date('Y-m-d');
+        $num = 3;
+        for($x=3;$x<=$highestRow;$x++){
+
+        	$payee = trim($objPHPExcel->getActiveSheet()->getCell('F'.$x)->getValue());
+	        $date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet()->getCell('D'.$x)->getValue()));
+	        $check_no = trim($objPHPExcel->getActiveSheet()->getCell('B'.$x)->getValue());
+	        $original_amount = trim($objPHPExcel->getActiveSheet()->getCell('R'.$x)->getValue());
+	        $description = trim($objPHPExcel->getActiveSheet()->getCell('H'.$x)->getValue());
+
+	        if($payee!=''){
+	        echo "Payee = " . $payee. ", date = " . $date . ", check_no = " .  $check_no . ", amount = " . $original_amount. ", description = ". $description . " = " .$x . "<br>";
+	    	}
+	     	 
+	     	$total = $objPHPExcel->getActiveSheet()->getCell('A'.$x)->getValue();
+	     	if($total == 'TOTAL'){
+	     		$x = $x + 1;
+	     	} else {
+	     		$x=$x;
+	     	}
+	        
+        }
+    }
 
 	public function form()
 	{

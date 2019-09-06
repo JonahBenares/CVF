@@ -137,13 +137,15 @@
     </style>    
 
     <div  class="pad">
-    	<form method='POST' action="">  
+    	<form method='POST' action="<?php echo base_url();?>index.php/masterfile/save_cv">  
     		<div  id="prnt_btn">
 	    		<center>
 			    	<div class="btn-group">
 						<a href="javascript:history.go(-1)" class="btn btn-success btn-md p-l-100 p-r-100"><span class="ti-arrow-left"></span> Back</a>				
-						<a  onclick="printPage()" class="btn btn-warning btn-md p-l-50 p-r-50"><span class="ti-printer"></span> Print</a>		
+						<a  onclick="printPage()" class="btn btn-warning btn-md p-l-50 p-r-50"><span class="ti-printer"></span> Print</a>
+                        <?php if($saved==0){ ?>		
 						<input type='submit' class="btn btn-primary btn-md p-l-100 p-r-100" value="Save"> 	
+                        <?php } ?>
 					</div>
 				</center>
 			</div>
@@ -242,19 +244,19 @@
                     <tr>
                         <td colspan="20" class="no-bord"><br></td>
                     </tr>
+                    <?php foreach($voucher AS $v){ ?>
                     <tr>
-                        <td colspan="10" class="bor-bottom bor-top bor-left">Payee:</td>
-                        <td colspan="10" class="bor-bottom bor-top bor-right">CV Date:</td>
+                        <td colspan="10" class="bor-bottom bor-top bor-left">Payee: <b><?php echo $v['payee'];?></b></td>
+                        <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <b><?php echo $v['cv_date'];?></b></td>
                     </tr>
                     <tr>
-                        <td colspan="2" class="bor-bottom bor-right bor-left"><br><br><br></td>
+                        <td colspan="2" class="bor-bottom bor-right bor-left"><?php echo $v['transaction_date'];?><br><br><br></td>
                         <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="3" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="3" class="bor-bottom bor-right"><br><br><br></td>
+                        <td colspan="3" class="bor-bottom bor-right"><?php echo $v['reference'];?><br><br><br></td>
+                        <td colspan="3" class="bor-bottom bor-right"><?php echo $v['original_amount'];?><br><br><br></td>
+                        <td colspan="4" class="bor-bottom bor-right"><br><br><br></td>
                         <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="4" class="bor-bottom bor-right"><br><br><br><br></td>
+                        <td colspan="4" class="bor-bottom bor-right"><?php echo $v['payment'];?><br><br><br><br></td>
                     </tr>
                     <tr>
                     	<td colspan="20"><br></td>
@@ -269,10 +271,10 @@
                         <td colspan="5" class="bor-right">Amount</td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b>DBP</b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b>497650</b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b>08/05/2019</b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b>-18,000</b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_no'];?></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_date'];?></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['original_amount'];?></b></td>
                     </tr>
                     <tr>
                     	<td colspan="20"><br></td>
@@ -283,9 +285,9 @@
                         <td colspan="7" class="bor-top bor-right">Approved by:</td>
                     </tr>
                     <tr>
-                        <td colspan="6" class="bor-right bor-left"><br></td>
-                        <td colspan="7" class="bor-right "><br></td>
-                        <td colspan="7" class="bor-right "><br></td>
+                        <td colspan="6" class="bor-right bor-left"><br><b><?php echo $v['prepared_by'];?></b></td>
+                        <td colspan="7" class="bor-right "><br><b><?php echo $v['checked_by'];?></b></td>
+                        <td colspan="7" class="bor-right "><br><b><?php echo $v['approved_by'];?></b></td>
                     </tr>
                     <tr>
                         <td colspan="6" class="bor-top bor-right bor-left">Released by:</td>
@@ -293,9 +295,9 @@
                         <td colspan="7" class="bor-top bor-right">OR/SI/AR No.:</td>
                     </tr>
                     <tr>
-                        <td colspan="6" class="bor-bottom bor-right bor-left"><br></td>
-                        <td colspan="7" class="bor-bottom bor-right"><br></td>
-                        <td colspan="7" class="bor-bottom bor-right"><br></td>
+                        <td colspan="6" class="bor-bottom bor-right bor-left"><br><b><?php echo $v['released_by'];?></b></td>
+                        <td colspan="7" class="bor-bottom bor-right"><br><b><?php echo $v['received_by'];?></b></td>
+                        <td colspan="7" class="bor-bottom bor-right"><br><b><?php echo $v['or_no'];?></b></td>
                     </tr>
                     <tr>
                     	<td colspan="20"><br></td>
@@ -310,18 +312,17 @@
                     	<td colspan="20"><br></td>
                     </tr>
                     <tr>
-                        <td colspan="10" class="bor-bottom bor-top bor-left">Payee:</td>
-                        <td colspan="10" class="bor-bottom bor-top bor-right">CV Date:</td>
+                        <td colspan="10" class="bor-bottom bor-top bor-left">Payee: <b><?php echo $v['payee'];?></b></td>
+                        <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <b><?php echo $v['cv_date'];?></b></td>
                     </tr>
                     <tr>
-                        <td colspan="2" class="bor-bottom bor-right bor-left"><br><br><br></td>
+                        <td colspan="2" class="bor-bottom bor-right bor-left"><?php echo $v['transaction_date'];?><br><br><br></td>
                         <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="3" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="3" class="bor-bottom bor-right"><br><br><br></td>
+                        <td colspan="3" class="bor-bottom bor-right"><?php echo $v['reference'];?><br><br><br></td>
+                        <td colspan="3" class="bor-bottom bor-right"><?php echo $v['original_amount'];?><br><br><br></td>
+                        <td colspan="4" class="bor-bottom bor-right"><br><br><br></td>
                         <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                        <td colspan="4" class="bor-bottom bor-right"><br><br><br><br></td>
+                        <td colspan="4" class="bor-bottom bor-right"><?php echo $v['payment'];?><br><br><br><br></td>
                     </tr>
                     <tr>
                     	<td colspan="20"><br></td>
@@ -336,13 +337,13 @@
                         <td colspan="5" class="bor-right">Amount</td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b>DBP</b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b>497650</b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b>08/05/2019</b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b>-18,000</b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_no'];?></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_date'];?></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['original_amount'];?></b></td>
                     </tr>
                     <tr>
-                    	<td colspan="20"><br></td>
+                        <td colspan="20"><br></td>
                     </tr>
                     <tr>
                         <td colspan="6" class="bor-right bor-top bor-left">Prepared by:</td>
@@ -350,9 +351,9 @@
                         <td colspan="7" class="bor-top bor-right">Approved by:</td>
                     </tr>
                     <tr>
-                        <td colspan="6" class="bor-right bor-left"><br></td>
-                        <td colspan="7" class="bor-right "><br></td>
-                        <td colspan="7" class="bor-right "><br></td>
+                        <td colspan="6" class="bor-right bor-left"><br><b><?php echo $v['prepared_by'];?></b></td>
+                        <td colspan="7" class="bor-right "><br><b><?php echo $v['checked_by'];?></b></td>
+                        <td colspan="7" class="bor-right "><br><b><?php echo $v['approved_by'];?></b></td>
                     </tr>
                     <tr>
                         <td colspan="6" class="bor-top bor-right bor-left">Released by:</td>
@@ -360,9 +361,9 @@
                         <td colspan="7" class="bor-top bor-right">OR/SI/AR No.:</td>
                     </tr>
                     <tr>
-                        <td colspan="6" class="bor-bottom bor-right bor-left"><br></td>
-                        <td colspan="7" class="bor-bottom bor-right"><br></td>
-                        <td colspan="7" class="bor-bottom bor-right"><br></td>
+                        <td colspan="6" class="bor-bottom bor-right bor-left"><br><b><?php echo $v['released_by'];?></b></td>
+                        <td colspan="7" class="bor-bottom bor-right"><br><b><?php echo $v['received_by'];?></b></td>
+                        <td colspan="7" class="bor-bottom bor-right"><br><b><?php echo $v['or_no'];?></b></td>
                     </tr>
                     <tr>
                         <td colspan="20" class="no-bord"><br></td>
@@ -374,6 +375,7 @@
                     <tr>
                     	<td colspan="20" align="center"><b class="text-blue">DUPLICATE COPY</b></td>
                     </tr>
+                    <?php } ?>
                     <tr>
                     	<td class="" colspan="4" align="center" rowspan="3"><div style="width:100%;padding: 15px;border:1px solid #000">LOGO</div></td>
                     	<td colspan="1" class=""></td>

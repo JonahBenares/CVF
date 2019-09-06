@@ -132,8 +132,7 @@
                                     <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
                                     <td colspan="3" class="bor-bottom bor-right"><?php echo $v['reference'];?><br><br><br></td>
                                     <td colspan="3" class="bor-bottom bor-right"><?php echo $v['original_amount'];?><br><br><br></td>
-                                    <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                                    <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
+                                    <td colspan="4" class="bor-bottom bor-right"><br><br><br></td>
                                     <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
                                     <td colspan="4" class="bor-bottom bor-right"><?php echo $v['payment'];?><br><br><br><br></td>
                                 </tr>

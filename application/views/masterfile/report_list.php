@@ -90,7 +90,13 @@
                                     	<td><?php echo $c->cv_date; ?></td>
                                     	<td><?php echo $c->payee; ?></td>
                                     	<td><?php echo $c->reference; ?></td>
-                                    	<td><?php echo $c->saved;?></td>
+                                    	<td>
+                                            <?php if($c->saved == 1){ ?>
+                                            <label class = "label label-info label-sm">Saved</label>
+                                            <?php } else { ?>
+                                            <label class = "label label-warning label-sm">Pending</label>
+                                            <?php } ?>
+                                        </td>
                                     	<td align="center">
                                     		<a href="<?php echo base_url(); ?>index.php/masterfile/form/<?php echo $c->cv_id; ?>" class="btn btn-xs btn-warning btn-fill">
                                     			<span class="ti-eye"></span>

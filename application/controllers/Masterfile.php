@@ -161,6 +161,7 @@ class Masterfile extends CI_Controller {
 		$cv_id = $this->uri->segment(3);
 		$data['cv_id'] = $cv_id;
 		foreach($this->super_model->select_row_where("check_voucher","cv_id",$cv_id) AS $cv){
+			$data['saved']=$cv->saved;
 			$data['voucher'][] = array(
 				'payee'=>$cv->payee,
 				'cv_date'=>$cv->cv_date,
@@ -182,6 +183,16 @@ class Masterfile extends CI_Controller {
 		$this->load->view('masterfile/print_cv',$data);
 		$this->load->view('template/footer');
 
+	}
+
+	public function save_cv(){
+		$cv_id = trim($this->input->post('cv_id')," ");
+		$data = array(
+			'saved'=>1,
+		);
+		if($this->super_model->update_where("check_voucher", $data, "cv_id", $cv_id)){
+            redirect(base_url().'index.php/masterfile/print_cv/'.$cv_id);
+        }
 	}
 
 	public function insert_update(){

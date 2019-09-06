@@ -43,6 +43,10 @@
     .text-blue{
         color: blue!important;
     }
+    .emphasis{
+        /*border-bottom: 1px solid red!important;*/
+        background-color: #f0b7b7!important;
+    }
 </style>
 <div class="main-panel">
     <nav class="navbar navbar-default">
@@ -164,19 +168,19 @@
                                 </tr>
                                 <tr>
                                     <?php if($saved==0){ ?>
-                                    <td colspan="6" class="bor-right bor-left"><input type="text" name = "prepared_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <td colspan="6" class="bor-right bor-left"><input type="text" name = "prepared_by" class="form-control emphasis" placeholder="type here.." name=""></td>
                                     <?php } else{ ?>
                                     <td colspan="6" class="bor-right bor-left"><?php echo $v['prepared_by']; ?></td>
                                     <?php } ?>
 
                                     <?php if($saved==0){ ?>
-                                    <td colspan="7" class="bor-right "><input type="text" name = "checked_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <td colspan="7" class="bor-right "><input type="text" name = "checked_by" class="form-control emphasis" placeholder="type here.." name=""></td>
                                     <?php }else { ?>
                                     <td colspan="7" class="bor-right "><?php echo $v['checked_by'];?></td>
                                     <?php } ?>
 
                                     <?php if($saved==0){ ?>
-                                    <td colspan="7" class="bor-right "><input type="text" name = "approved_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <td colspan="7" class="bor-right "><input type="text" name = "approved_by" class="form-control emphasis" placeholder="type here.." name=""></td>
                                     <?php }else { ?>
                                     <td colspan="7" class="bor-right "><?php echo $v['approved_by'];?></td>
                                     <?php } ?>
@@ -188,19 +192,19 @@
                                 </tr>
                                  <tr>
                                     <?php if($saved==0){ ?>
-                                    <td colspan="6" class="bor-bottom bor-right bor-left"><input type="text" name = "released_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <td colspan="6" class="bor-bottom bor-right bor-left"><input type="text" name = "released_by" class="form-control emphasis" placeholder="type here.." name=""></td>
                                     <?php } else { ?>
                                     <td colspan="6" class="bor-bottom bor-right bor-left"><?php echo $v['released_by'];?></td>
                                     <?php } ?>
 
                                     <?php if($saved==0){ ?>
-                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "received_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "received_by" class="form-control emphasis" placeholder="type here.." name=""></td>
                                     <?php }else { ?>
                                     <td colspan="7" class="bor-bottom bor-right"><?php echo $v['received_by'];?></td>
                                     <?php } ?>
 
                                     <?php if($saved==0){ ?>
-                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "or_no" class="form-control" placeholder="type here.." name=""></td>
+                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "or_no" class="form-control emphasis" placeholder="type here.." name=""></td>
                                     <?php } else { ?>
                                     <td colspan="7" class="bor-bottom bor-right"><?php echo $v['or_no'];?></td>
                                     <?php } ?>
@@ -210,10 +214,13 @@
                         </div>
                         <center>
                             <input type="hidden" name="cv_id" value = "<?php echo $cv_id; ?>">
-                            <input type="submit" class="btn btn-md btn-warning btn-fill" name="button" value="Print">
-                            <!-- <a href="<?php echo base_url(); ?>index.php/masterfile/print_cv" class="btn btn-xs btn-warning btn-fill">
-                                <span class="ti-eye"></span>
-                            </a> -->
+                            <?php if($saved==0){ ?>
+                                <input type="submit" class="btn btn-md btn-warning btn-fill" name="button" value="Print">
+                            <?php }else { ?>
+                                <a href="<?php echo base_url(); ?>index.php/masterfile/print_cv/<?php echo $cv_id; ?>" class="btn btn-md btn-warning btn-fill">
+                                    Print
+                                </a>
+                            <?php } ?>
                         </center>                        
                         <br>
                     </form>

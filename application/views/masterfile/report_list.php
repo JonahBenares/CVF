@@ -92,9 +92,9 @@
                                     	<td><?php echo $c->reference; ?></td>
                                     	<td>
                                             <?php if($c->saved == 1){ ?>
-                                            <label class = "label label-info label-sm">Saved</label>
+                                            <span class = "label label-info label-sm">Saved</span>
                                             <?php } else { ?>
-                                            <label class = "label label-warning label-sm">Pending</label>
+                                            <span class = "label label-warning label-sm">Pending</span>
                                             <?php } ?>
                                         </td>
                                     	<td align="center">

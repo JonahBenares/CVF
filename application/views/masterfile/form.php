@@ -90,7 +90,7 @@
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="card">
-                    <form>
+                    <form method="POST" action = "<?php echo base_url();?>index.php/masterfile/insert_update">
                     	<div class="datatable-dashv1-list custom-datatable-overright">
                             <table class="table">
                                 <tr>
@@ -122,19 +122,20 @@
                                 <tr>
                                     <td colspan="20" class="no-bord"><br></td>
                                 </tr>
+                                <?php foreach($voucher AS $v){ ?>
                                 <tr>
-                                    <td colspan="10" class="bor-bottom bor-top bor-left">Payee:</td>
-                                    <td colspan="10" class="bor-bottom bor-top bor-right">CV Date:</td>
+                                    <td colspan="10" class="bor-bottom bor-top bor-left">Payee: <?php echo $v['payee'];?></td>
+                                    <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <?php echo $v['cv_date'];?></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="bor-bottom bor-right bor-left"><br><br><br></td>
+                                    <td colspan="2" class="bor-bottom bor-right bor-left"><?php echo $v['transaction_date'];?><br><br><br></td>
                                     <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                                    <td colspan="3" class="bor-bottom bor-right"><br><br><br></td>
-                                    <td colspan="3" class="bor-bottom bor-right"><br><br><br></td>
+                                    <td colspan="3" class="bor-bottom bor-right"><?php echo $v['reference'];?><br><br><br></td>
+                                    <td colspan="3" class="bor-bottom bor-right"><?php echo $v['original_amount'];?><br><br><br></td>
                                     <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
                                     <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
                                     <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                                    <td colspan="4" class="bor-bottom bor-right"><br><br><br><br></td>
+                                    <td colspan="4" class="bor-bottom bor-right"><?php echo $v['payment'];?><br><br><br><br></td>
                                 </tr>
                                 <tr>
                                     <td colspan="20" class="no-bord"><br></td>
@@ -149,10 +150,10 @@
                                     <td colspan="5" class="bor-right">Amount</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b>DBP</b></td>
-                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b>497650</b></td>
-                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b>08/05/2019</b></td>
-                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b>-18,000</b></td>
+                                    <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b></b></td>
+                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_no'];?></b></td>
+                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_date'];?></b></td>
+                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['original_amount'];?></b></td>
                                 </tr>
                                 <tr>
                                     <td colspan="20" class="no-bord"><br></td>
@@ -163,9 +164,23 @@
                                     <td colspan="7" class="bor-right bor-top">Approved by:</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6" class="bor-right bor-left"><input type="text" class="form-control" placeholder="type here.." name=""></td>
-                                    <td colspan="7" class="bor-right "><input type="text" class="form-control" placeholder="type here.." name=""></td>
-                                    <td colspan="7" class="bor-right "><input type="text" class="form-control" placeholder="type here.." name=""></td>
+                                    <?php if($saved==0){ ?>
+                                    <td colspan="6" class="bor-right bor-left"><input type="text" name = "prepared_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <?php } else{ ?>
+                                    <td colspan="6" class="bor-right bor-left"><?php echo $v['prepared_by']; ?></td>
+                                    <?php } ?>
+
+                                    <?php if($saved==0){ ?>
+                                    <td colspan="7" class="bor-right "><input type="text" name = "checked_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <?php }else { ?>
+                                    <td colspan="7" class="bor-right "><?php echo $v['checked_by'];?></td>
+                                    <?php } ?>
+
+                                    <?php if($saved==0){ ?>
+                                    <td colspan="7" class="bor-right "><input type="text" name = "approved_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <?php }else { ?>
+                                    <td colspan="7" class="bor-right "><?php echo $v['approved_by'];?></td>
+                                    <?php } ?>
                                 </tr>
                                 <tr>
                                     <td colspan="6" class="bor-top bor-right bor-left">Released by:</td>
@@ -173,17 +188,33 @@
                                     <td colspan="7" class="bor-top bor-right">OR/SI/AR No.:</td>
                                 </tr>
                                  <tr>
-                                    <td colspan="6" class="bor-bottom bor-right bor-left"><input type="text" class="form-control" placeholder="type here.." name=""></td>
-                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" class="form-control" placeholder="type here.." name=""></td>
-                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" class="form-control" placeholder="type here.." name=""></td>
+                                    <?php if($saved==0){ ?>
+                                    <td colspan="6" class="bor-bottom bor-right bor-left"><input type="text" name = "released_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <?php } else { ?>
+                                    <td colspan="6" class="bor-bottom bor-right bor-left"><?php echo $v['released_by'];?></td>
+                                    <?php } ?>
+
+                                    <?php if($saved==0){ ?>
+                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "received_by" class="form-control" placeholder="type here.." name=""></td>
+                                    <?php }else { ?>
+                                    <td colspan="7" class="bor-bottom bor-right"><?php echo $v['received_by'];?></td>
+                                    <?php } ?>
+
+                                    <?php if($saved==0){ ?>
+                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "or_no" class="form-control" placeholder="type here.." name=""></td>
+                                    <?php } else { ?>
+                                    <td colspan="7" class="bor-bottom bor-right"><?php echo $v['or_no'];?></td>
+                                    <?php } ?>
                                 </tr>
+                                <?php } ?>
                             </table>
                         </div>
                         <center>
-                            <input type="button" class="btn btn-md btn-warning btn-fill" name="button" value="Print">
-                            <a href="<?php echo base_url(); ?>index.php/masterfile/print_cv" class="btn btn-xs btn-warning btn-fill">
+                            <input type="hidden" name="cv_id" value = "<?php echo $cv_id; ?>">
+                            <input type="submit" class="btn btn-md btn-warning btn-fill" name="button" value="Print">
+                            <!-- <a href="<?php echo base_url(); ?>index.php/masterfile/print_cv" class="btn btn-xs btn-warning btn-fill">
                                 <span class="ti-eye"></span>
-                            </a>
+                            </a> -->
                         </center>                        
                         <br>
                     </form>

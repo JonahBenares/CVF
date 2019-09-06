@@ -390,6 +390,7 @@
                     <tr><td><br><br><br><br></td></tr>                                                     
                 </table>		    
 	    	</div>
+            <input type="hidden" name="cv_id" value="<?php echo $cv_id; ?>">
     	</form>
     </div>
     <script type="text/javascript">

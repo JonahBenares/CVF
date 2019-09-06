@@ -85,50 +85,19 @@
                                 	<th width="5%" align="center"><span class="ti-menu"></span></th>
                                 </thead>
                                 <tbody>
+                                    <?php foreach($check AS $c){ ?>
                                     <tr>
-                                    	<td>1</td>
-                                    	<td>Dakota Rice</td>
-                                    	<td>$36,738</td>
-                                    	<td>Niger</td>
+                                    	<td><?php echo $c->cv_date; ?></td>
+                                    	<td><?php echo $c->payee; ?></td>
+                                    	<td><?php echo $c->reference; ?></td>
+                                    	<td><?php echo $c->saved;?></td>
                                     	<td align="center">
-                                    		<a href="<?php echo base_url(); ?>index.php/masterfile/form" class="btn btn-xs btn-warning btn-fill">
+                                    		<a href="<?php echo base_url(); ?>index.php/masterfile/form/<?php echo $c->cv_id; ?>" class="btn btn-xs btn-warning btn-fill">
                                     			<span class="ti-eye"></span>
                                     		</a>
                                     	</td>
                                     </tr>
-                                    <tr>
-                                    	<td>1</td>
-                                    	<td>Dakota Rice</td>
-                                    	<td>$36,738</td>
-                                    	<td>Niger</td>
-                                    	<td align="center">
-                                    		<a href="<?php echo base_url(); ?>index.php/masterfile/form" class="btn btn-xs btn-warning btn-fill">
-                                    			<span class="ti-eye"></span>
-                                    		</a>
-                                    	</td>
-                                    </tr>
-                                    <tr>
-                                    	<td>1</td>
-                                    	<td>Dakota Rice</td>
-                                    	<td>$36,738</td>
-                                    	<td>Niger</td>
-                                    	<td align="center">
-                                    		<a href="<?php echo base_url(); ?>index.php/masterfile/form" class="btn btn-xs btn-warning btn-fill">
-                                    			<span class="ti-eye"></span>
-                                    		</a>
-                                    	</td>
-                                    </tr>
-                                    <tr>
-                                    	<td>1</td>
-                                    	<td>Dakota Rice</td>
-                                    	<td>$36,738</td>
-                                    	<td>Niger</td>
-                                    	<td align="center">
-                                    		<a href="<?php echo base_url(); ?>index.php/masterfile/form" class="btn btn-xs btn-warning btn-fill">
-                                    			<span class="ti-eye"></span>
-                                    		</a>
-                                    	</td>
-                                    </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>

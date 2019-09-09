@@ -416,7 +416,8 @@
                     	<td colspan="20"><br></td>
                     </tr>
                     <tr>
-                    	<td colspan="20" class="bor-all"><br></td>
+                        <td colspan="14" class="bor-bottom bor-left bor-top"><b><?php echo $v['description'];?></b></td>
+                    	<td colspan="7" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
                     </tr>
                     <tr>
                     	<td colspan="20" class="bor-bot-dash" align="center"><b class="text-blue">ORIGINAL COPY</b></td>

@@ -99,6 +99,7 @@ class Masterfile extends CI_Controller {
 	        	$date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet(1)->getCell('D'.$x)->getValue()));
 		        $check_no = trim($objPHPExcel->getActiveSheet(1)->getCell('B'.$x)->getValue());
 		        $original_amount = trim($objPHPExcel->getActiveSheet(1)->getCell('R'.$x)->getValue());
+		        $orig_amount = str_replace("-", "", $original_amount);
 		        $description = trim($objPHPExcel->getActiveSheet(1)->getCell('H'.$x)->getValue());
 		        $t = $x+2;
 		        $reference = trim($objPHPExcel->getActiveSheet(1)->getCell('B'.$t)->getValue());
@@ -108,11 +109,11 @@ class Masterfile extends CI_Controller {
 		    		'cv_date'=>$date,
 		    		'transaction_date'=>$transac_date,
 		    		'check_no'=>$check_no,
-		    		'original_amount'=>$original_amount,
+		    		'original_amount'=>$orig_amount,
 		    		'description'=>$description,
 		    		'check_date'=>$date,
 		    		'reference'=>$reference,
-		    		'payment'=>$original_amount,
+		    		'payment'=>$orig_amount,
 		    	);
 		    	$this->super_model->insert_into("check_voucher", $data);
 	    	}

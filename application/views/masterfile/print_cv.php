@@ -252,9 +252,9 @@
 					</div>
 				</center>
 			</div>
-			<br>
-            <div class="blue">
-                <?php foreach($voucher AS $v){ ?>
+			<br> 
+            <?php foreach($voucher AS $v){ ?>
+            <!-- <div class="blue">
                 <table class="table table-s" style="margin-bottom: 0px;border-bottom: 2px solid #000">
                     <tr>
                         <td width="5%" style="border: 0px!important"></td>
@@ -313,7 +313,7 @@
                             //$test = convertNumber($num)." and ".$num2."/100";
                             echo $currency;
                         ?>
-                        <!-- Five Hundred Thousand and 00/100 -->********************************************************</td>
+                        Five Hundred Thousand and 00/100********************************************************</td>
                         <td colspan="3"></td>
                     </tr>     
                     <tr><td colspan="20"><br><br><br><br><br><br></td></tr>              
@@ -323,7 +323,7 @@
                         <td colspan="3"></td>
                     </tr>              
                 </table>
-            </div>
+            </div> -->
 	    	<div style="background: #fff; border:0px solid #000" >
 	    		<table class="table" >
                     <tr>
@@ -353,7 +353,7 @@
                     </tr>
                     <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
-                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right"><!-- 01-000001 --></b></h5></td>
+                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right">01-000001</b></h5></td>
                     </tr>
                     <tr>
                         <td colspan="20" class="no-bord"><br></td>
@@ -484,7 +484,7 @@
                     </tr>
                     <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
-                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right"><!-- 01-000001 --></b></h5></td>
+                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right">01-000001</b></h5></td>
                     </tr> 
                     <tr>
                     	<td colspan="20" align="center"><b class="text-blue">DUPLICATE COPY</b></td>

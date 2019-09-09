@@ -8,18 +8,18 @@
     	<div class="sidebar-wrapper">
             <div class="logo">
                 <a href="" class="simple-text">
-                    SYSTEM NAME
+                    CV FORM
                 </a>
             </div>
 
             <ul class="nav">
-                <li class="">
+                <li class="active">
                     <a href="<?php echo base_url(); ?>index.php/masterfile/index">
                         <i class="ti-panel"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="active">
+                <li class="">
                     <a href="<?php echo base_url(); ?>index.php/masterfile/report_list">
                         <i class="ti-panel"></i>
                         <p>Report</p>

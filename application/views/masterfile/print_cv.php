@@ -129,6 +129,98 @@
         	.pad{
         	padding:0px 0px 0px 0px
         	}
+            .table-bordered>tbody>tr>td, 
+            .table-bordered>tbody>tr>th, 
+            .table-bordered>tfoot>tr>td, 
+            .table-bordered>tfoot>tr>th, 
+            .table-bordered>thead>tr>td, 
+            .table-bordered>thead>tr>th
+            {
+                border: 1px solid #000!important;
+            }
+            .text-white{
+            color: #fff;
+            }
+            .text-red{
+                color: red!important;
+            }
+            .text-blue{
+                color: blue!important;
+            }
+            .emphasis{
+                /*border-bottom: 1px solid red!important;*/
+                background-color: #ffe5e5!important;
+            }
+            .bor-all{
+                border: 1px solid #000!important; 
+            }
+            .bor-top{
+                border-top: 1px solid #000!important; 
+            }
+            .bor-bottom{
+                border-bottom: 1px solid #000!important; 
+            }
+            .bor-right{
+                border-right: 1px solid #000!important; 
+            }
+            .bor-left{
+                border-left: 1px solid #000!important; 
+            }
+            .no-bord{
+                border: 0px solid #000!important; 
+            }
+            .no-bord-top{
+                border-top: 0px solid #000!important; 
+            }
+            .bor-bot-dash{
+                border-bottom: 1px dashed #000!important; 
+            }
+            .padding-left{
+                padding-left: 1px solid #000!important; 
+            }
+            .table > thead > tr > th, 
+            .table > tbody > tr > th, 
+            .table > tfoot > tr > th, 
+            .table > thead > tr > td, 
+            .table > tbody > tr > td, 
+            .table > tfoot > tr > td {
+                padding: 0px!important;
+                vertical-align: middle;
+            }
+            .table-bord>tbody>tr>td, 
+            .table-bord>tbody>tr>th, 
+            .table-bord>tfoot>tr>td, 
+            .table-bord>tfoot>tr>th, 
+            .table-bord>thead>tr>td, 
+            .table-bord>thead>tr>th {
+                border:1px solid #000!important;
+            }
+            .nomarg{
+                margin: 0px;
+            }
+
+            .blue{
+                background-image: url('<?php echo base_url(); ?>assets/img/png.png')!important;
+                background-repeat:no-repeat!important;
+                /*background-size: contain!important;*/
+                background-position: center center!important;
+            }
+            #prnt_btn, .reco, #printnotes{
+                display: none;
+            }
+            html, body{
+                background: #fff!important;
+                font-size:12px!important;
+            }
+            .text-white{
+                color: #fff;
+            }
+            .text-red{
+                color: red!important;
+            }
+            .text-blue{
+                color: blue!important;
+            }
         }
         .table-bordered>tbody>tr>td, 
         .table-bordered>tbody>tr>th, 
@@ -151,24 +243,6 @@
 		.sel-des{
 			border: 0px!important;
 			width: 100%;
-		}
-		@media print{
-			#prnt_btn, .reco, #printnotes{
-				display: none;
-			}
-			html, body{
-	            background: #fff!important;
-	            font-size:12px!important;
-	        }
-	        .text-white{
-				color: #fff;
-			}
-			.text-red{
-				color: red!important;
-			}
-			.text-blue{
-				color: blue!important;
-			}
 		}
 		.text-white{
 			color: #fff;

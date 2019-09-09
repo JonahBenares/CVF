@@ -1,4 +1,108 @@
-  	<head>
+  	<?php
+        function convert_number_to_words($number) {
+            $hyphen      = ' ';
+            $conjunction = ' and ';
+            $separator   = ', ';
+            $negative    = ' ';
+            $decimal     = ' point ';
+            $dictionary  = array(
+                0                   => 'Zero',
+                1                   => 'One',
+                2                   => 'Two',
+                3                   => 'Three',
+                4                   => 'Four',
+                5                   => 'Five',
+                6                   => 'Six',
+                7                   => 'Seven',
+                8                   => 'Eight',
+                9                   => 'Nine',
+                10                  => 'Ten',
+                11                  => 'Eleven',
+                12                  => 'Twelve',
+                13                  => 'Thirteen',
+                14                  => 'Fourteen',
+                15                  => 'Fifteen',
+                16                  => 'Sixteen',
+                17                  => 'Seventeen',
+                18                  => 'Eighteen',
+                19                  => 'Nineteen',
+                20                  => 'Twenty',
+                30                  => 'Thirty',
+                40                  => 'Fourty',
+                50                  => 'Fifty',
+                60                  => 'Sixty',
+                70                  => 'Seventy',
+                80                  => 'Eighty',
+                90                  => 'Ninety',
+                100                 => 'Hundred',
+                1000                => 'Thousand',
+                1000000             => 'Million',
+                1000000000          => 'Billion',
+                1000000000000       => 'Trillion',
+                1000000000000000    => 'Quadrillion',
+                1000000000000000000 => 'Quintillion'
+            );
+            if (!is_numeric($number)) {
+                return false;
+            }
+            if (($number >= 0 && (int) $number < 0) || (int) $number < 0 - PHP_INT_MAX) {
+                // overflow
+                trigger_error(
+                    'convert_number_to_words only accepts numbers between -' . PHP_INT_MAX . ' and ' . PHP_INT_MAX,
+                    E_USER_WARNING
+                );
+                return false;
+            }
+            if ($number < 0) {
+                return $negative . convert_number_to_words(abs($number));
+            }
+            $string = $fraction = null;
+            if (strpos($number, '.') !== false) {
+                list($number, $fraction) = explode('.', $number);
+            }
+            switch (true) {
+                case $number < 21:
+                    $string = $dictionary[$number];
+                    break;
+                case $number < 100:
+                    $tens   = ((int) ($number / 10)) * 10;
+                    $units  = $number % 10;
+                    $string = $dictionary[$tens];
+                    if ($units) {
+                        $string .= $hyphen . $dictionary[$units];
+                    }
+                    break;
+                case $number < 1000:
+                    $hundreds  = $number / 100;
+                    $remainder = $number % 100;
+                    $string = $dictionary[$hundreds] . ' ' . $dictionary[100];
+                    if ($remainder) {
+                        $string .= $conjunction . convert_number_to_words($remainder);
+                    }
+                    break;
+                default:
+                    $baseUnit = pow(1000, floor(log($number, 1000)));
+                    $numBaseUnits = (int) ($number / $baseUnit);
+                    $remainder = $number % $baseUnit;
+                    $string = convert_number_to_words($numBaseUnits) . ' ' . $dictionary[$baseUnit];
+                    if ($remainder) {
+                        $string .= $remainder < 100 ? $conjunction : $separator;
+                        $string .= convert_number_to_words($remainder);
+                    }
+                    break;
+            }
+            if (null !== $fraction && is_numeric($fraction)) {
+                $string .= $decimal;
+                $words = array();
+                foreach (str_split((string) $fraction) as $number) {
+                    $words[] = $dictionary[$number];
+                }
+                $string .= implode(' ', $words);
+            }
+            return $string;
+        }
+    ?>
+    <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>Accounting System</title>
@@ -135,22 +239,22 @@
         }
 	    
     </style>    
-
     <div  class="pad">
-    	<form method='POST' action="<?php echo base_url();?>index.php/masterfile/save_cv">  
+    	<form>  
     		<div  id="prnt_btn">
 	    		<center>
 			    	<div class="btn-group">
 						<a href="javascript:history.go(-1)" class="btn btn-success btn-md p-l-100 p-r-100"><span class="ti-arrow-left"></span> Back</a>				
 						<a  onclick="printPage()" class="btn btn-warning btn-md p-l-50 p-r-50"><span class="ti-printer"></span> Print</a>
-                        <?php if($saved==0){ ?>		
+                        <!-- <?php if($saved==0){ ?>		
 						<input type='submit' class="btn btn-primary btn-md p-l-100 p-r-100" value="Save"> 	
-                        <?php } ?>
+                        <?php } ?> -->
 					</div>
 				</center>
 			</div>
 			<br>
             <div class="blue">
+                <?php foreach($voucher AS $v){ ?>
                 <table class="table table-s" style="margin-bottom: 0px;border-bottom: 2px solid #000">
                     <tr>
                         <td width="5%" style="border: 0px!important"></td>
@@ -189,23 +293,33 @@
                     </tr>  
                     <tr>
                         <td colspan="17"></td>
-                        <td colspan="3">2/21/2019</td>
+                        <td colspan="3"><?php echo date('m/d/Y',strtotime($v['cv_date']));?></td>
                     </tr>   
                     <tr><td colspan="20"><br></td></tr>      
                     <tr>
                         <td colspan="2"></td>
-                        <td colspan="15">POWER ONE CORP</td>
-                        <td colspan="3">**500,000.00</td>
+                        <td colspan="15"><?php echo $v['payee'];?></td>
+                        <td colspan="3">**<?php echo $v['payment'];?></td>
                     </tr>   
                     <tr>
                         <td colspan="1"></td>
-                        <td colspan="16">Five Hundred Thousand and 00/100*********************************************************</td>
+                        <td colspan="16">
+                        <?php 
+                            $num = $v['payment'];
+                            $dec=explode('.',$num);
+                            $num1=$dec[0];
+                            $num2=$dec[1];
+                            $currency =  convert_number_to_words($num1)." and ".$num2."/100";
+                            //$test = convertNumber($num)." and ".$num2."/100";
+                            echo $currency;
+                        ?>
+                        <!-- Five Hundred Thousand and 00/100 -->********************************************************</td>
                         <td colspan="3"></td>
                     </tr>     
                     <tr><td colspan="20"><br><br><br><br><br><br></td></tr>              
                     <tr>
                         <td colspan="2"></td>
-                        <td colspan="15">Payment of Advances to POC( direct deposit fr CEN</td>
+                        <td colspan="15"><?php echo $v['description'];?></td>
                         <td colspan="3"></td>
                     </tr>              
                 </table>
@@ -244,13 +358,12 @@
                     <tr>
                         <td colspan="20" class="no-bord"><br></td>
                     </tr>
-                    <?php foreach($voucher AS $v){ ?>
                     <tr>
                         <td colspan="10" class="bor-bottom bor-top bor-left">Payee: <b><?php echo $v['payee'];?></b></td>
-                        <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <b><?php echo $v['cv_date'];?></b></td>
+                        <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <b><?php echo date('m/d/Y',strtotime($v['cv_date']));?></b></td>
                     </tr>
                     <tr>
-                        <td colspan="2" class="bor-bottom bor-right bor-left"><?php echo $v['transaction_date'];?><br><br><br></td>
+                        <td colspan="2" class="bor-bottom bor-right bor-left"><?php echo date('m/d/Y',strtotime($v['transaction_date']));?><br><br><br></td>
                         <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
                         <td colspan="3" class="bor-bottom bor-right"><?php echo $v['reference'];?><br><br><br></td>
                         <td colspan="3" class="bor-bottom bor-right"><?php echo $v['original_amount'];?><br><br><br></td>
@@ -273,7 +386,7 @@
                     <tr>
                         <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b></b></td>
                         <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_no'];?></b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_date'];?></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo date('m/d/Y',strtotime($v['check_date']));?></b></td>
                         <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['original_amount'];?></b></td>
                     </tr>
                     <tr>
@@ -313,10 +426,10 @@
                     </tr>
                     <tr>
                         <td colspan="10" class="bor-bottom bor-top bor-left">Payee: <b><?php echo $v['payee'];?></b></td>
-                        <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <b><?php echo $v['cv_date'];?></b></td>
+                        <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <b><?php echo date('m/d/Y',strtotime($v['cv_date']));?></b></td>
                     </tr>
                     <tr>
-                        <td colspan="2" class="bor-bottom bor-right bor-left"><?php echo $v['transaction_date'];?><br><br><br></td>
+                        <td colspan="2" class="bor-bottom bor-right bor-left"><?php echo date('m/d/Y',strtotime($v['transaction_date']));?><br><br><br></td>
                         <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
                         <td colspan="3" class="bor-bottom bor-right"><?php echo $v['reference'];?><br><br><br></td>
                         <td colspan="3" class="bor-bottom bor-right"><?php echo $v['original_amount'];?><br><br><br></td>
@@ -339,7 +452,7 @@
                     <tr>
                         <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b></b></td>
                         <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_no'];?></b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_date'];?></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo date('m/d/Y',strtotime($v['check_date']));?></b></td>
                         <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['original_amount'];?></b></td>
                     </tr>
                     <tr>
@@ -375,7 +488,6 @@
                     <tr>
                     	<td colspan="20" align="center"><b class="text-blue">DUPLICATE COPY</b></td>
                     </tr>
-                    <?php } ?>
                     <tr>
                     	<td class="" colspan="4" align="center" rowspan="3"><div style="width:100%;padding: 15px;border:1px solid #000">LOGO</div></td>
                     	<td colspan="1" class=""></td>
@@ -390,9 +502,9 @@
                     	<td colspan="15"> TIN/TEL. NO</td>
                     </tr>
                     <tr><td><br><br><br><br></td></tr>                                                     
-                </table>		    
+                </table>	
+                <?php } ?>	    
 	    	</div>
-            <input type="hidden" name="cv_id" value="<?php echo $cv_id; ?>">
     	</form>
     </div>
     <script type="text/javascript">

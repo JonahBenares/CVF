@@ -185,7 +185,7 @@ class Masterfile extends CI_Controller {
 
 	}
 
-	public function save_cv(){
+	/*public function save_cv(){
 		$cv_id = trim($this->input->post('cv_id')," ");
 		$data = array(
 			'saved'=>1,
@@ -193,7 +193,7 @@ class Masterfile extends CI_Controller {
 		if($this->super_model->update_where("check_voucher", $data, "cv_id", $cv_id)){
             redirect(base_url().'index.php/masterfile/print_cv/'.$cv_id);
         }
-	}
+	}*/
 
 	public function insert_update(){
         $cv_id = trim($this->input->post('cv_id')," ");
@@ -210,7 +210,7 @@ class Masterfile extends CI_Controller {
             'released_by'=>$released_by,
             'received_by'=>$received_by,
             'or_no'=>$or_no,
-            //'saved'=>1,
+            'saved'=>1,
         );
         if($this->super_model->update_where("check_voucher", $data, "cv_id", $cv_id)){
             redirect(base_url().'index.php/masterfile/print_cv/'.$cv_id);

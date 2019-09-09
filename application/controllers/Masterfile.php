@@ -51,6 +51,14 @@ class Masterfile extends CI_Controller {
 
 	}
 
+	public function login()
+	{
+		$this->load->view('template/header');
+		$this->load->view('masterfile/login');
+		$this->load->view('template/footer');
+
+	}
+
 	public function report_list(){
 		$this->load->view('template/header');
 		$this->load->view('template/navbar');

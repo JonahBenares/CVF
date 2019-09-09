@@ -33,12 +33,12 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
+                    <!-- <li>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="ti-panel"></i>
                             <p>Stats</p>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="ti-settings"></i>
@@ -71,7 +71,7 @@
                                   <span class="ti-printer"></span> Upload File
                                 </button>                            
                             </h4>
-                            <p class="category">Here is a subtitle for this table</p>
+                            <p class="category">..</p>
 
                             <br>
                         </div>

@@ -89,19 +89,20 @@ class Masterfile extends CI_Controller {
             die('Error loading file"'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
         }
 
-        $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow(); 
+        $objPHPExcel->setActiveSheetIndex(1);
+        $highestRow = $objPHPExcel->getActiveSheet(1)->getHighestRow(); 
         for($x=3;$x<=$highestRow;$x++){
-        	$payee = trim($objPHPExcel->getActiveSheet()->getCell('F'.$x)->getValue());
-        	$total = $objPHPExcel->getActiveSheet()->getCell('A'.$x)->getValue();
+        	$payee = trim($objPHPExcel->getActiveSheet(1)->getCell('F'.$x)->getValue());
+        	$total = $objPHPExcel->getActiveSheet(1)->getCell('A'.$x)->getValue();
         	if($payee!=''){
         		$pay = $payee;
-	        	$date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet()->getCell('D'.$x)->getValue()));
-		        $check_no = trim($objPHPExcel->getActiveSheet()->getCell('B'.$x)->getValue());
-		        $original_amount = trim($objPHPExcel->getActiveSheet()->getCell('R'.$x)->getValue());
-		        $description = trim($objPHPExcel->getActiveSheet()->getCell('H'.$x)->getValue());
+	        	$date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet(1)->getCell('D'.$x)->getValue()));
+		        $check_no = trim($objPHPExcel->getActiveSheet(1)->getCell('B'.$x)->getValue());
+		        $original_amount = trim($objPHPExcel->getActiveSheet(1)->getCell('R'.$x)->getValue());
+		        $description = trim($objPHPExcel->getActiveSheet(1)->getCell('H'.$x)->getValue());
 		        $t = $x+2;
-		        $reference = trim($objPHPExcel->getActiveSheet()->getCell('B'.$t)->getValue());
-		        $transac_date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet()->getCell('D'.$t)->getValue()));
+		        $reference = trim($objPHPExcel->getActiveSheet(1)->getCell('B'.$t)->getValue());
+		        $transac_date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet(1)->getCell('D'.$t)->getValue()));
 	    		$data=array(
 		    		'payee'=>$pay,
 		    		'cv_date'=>$date,
@@ -115,7 +116,6 @@ class Masterfile extends CI_Controller {
 		    	);
 		    	$this->super_model->insert_into("check_voucher", $data);
 	    	}
-	        
 	        if($total == 'TOTAL'){
 	     		$x = $x + 1;
 

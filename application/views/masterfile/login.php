@@ -6,6 +6,7 @@
   h2 {
   font-weight: 300;
   text-align: center;
+  font: 200 30px Arial;
   }
 
   p {
@@ -55,7 +56,7 @@
   }
 
   input[type="text"],
-  input[type="email"] {
+  input[type="password"] {
     width: 100%;
     padding: 0 0 0 10px;
     margin: 0;
@@ -71,27 +72,27 @@
     background: none;
   }
   input[type="text"]:focus,
-  input[type="email"]:focus {
+  input[type="password"]:focus {
     border-color: #3ca9e2;
   }
   input[type="text"]:focus:invalid,
-  input[type="email"]:focus:invalid {
+  input[type="password"]:focus:invalid {
     color: #cc1e2b;
     border-color: #cc1e2b;
   }
   input[type="text"]:valid ~ .validation,
-  input[type="email"]:valid ~ .validation {
+  input[type="password"]:valid ~ .validation {
     display: block;
     border-color: #0C0;
   }
   input[type="text"]:valid ~ .validation span,
-  input[type="email"]:valid ~ .validation span {
+  input[type="password"]:valid ~ .validation span {
     background: #0C0;
     position: absolute;
     border-radius: 6px;
   }
   input[type="text"]:valid ~ .validation span:first-child,
-  input[type="email"]:valid ~ .validation span:first-child {
+  input[type="password"]:valid ~ .validation span:first-child {
     top: 30px;
     left: 14px;
     width: 20px;
@@ -100,7 +101,7 @@
             transform: rotate(-45deg);
   }
   input[type="text"]:valid ~ .validation span:last-child,
-  input[type="email"]:valid ~ .validation span:last-child {
+  input[type="password"]:valid ~ .validation span:last-child {
     top: 35px;
     left: 8px;
     width: 11px;
@@ -147,23 +148,61 @@
     padding: 10px 0;
     border-radius: 0 0 4px 4px;
   }
+  .alert-shake {
+    -webkit-animation-name: spaceboots;
+    -webkit-animation-duration: 0.8s;
+    -webkit-transform-origin: 50% 50%;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
+}
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.alert {
+    font: 200 14px Arial;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    border-radius: 4px;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
 
 </style>
 
 <br><br><br>
 <div id="login-form-wrap">
-<h2>Login</h2>
-<form id="login-form">
-<p>
-<input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
-</p>
-<p>
-<input type="email" id="email" name="email" placeholder="Email Address" required><i class="validation"><span></span><span></span></i>
-</p>
-<p>
-<input type="submit" id="login" value="Login">
-</p>
-</form>
+    <h2>Login</h2>
+    <?php
+        $error_msg= $this->session->flashdata('error_msg');  
+        ?>
+        <?php 
+            if($error_msg){
+        ?>
+        <div class="alert alert-danger alert-shake">
+          <center><?php echo $error_msg; ?></center>                    
+        </div>
+    <?php } ?>
+    <form id="login-form" method = "POST" action="<?php echo base_url(); ?>index.php/masterfile/login">
+    <p>
+    <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <p>
+    <input type="password" id="password" name="password" placeholder="Password" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <p>
+    <input type="submit" id="login" value="Login">
+    </p>
+    </form>
 <div id="create-account-wrap">
 
 </div>

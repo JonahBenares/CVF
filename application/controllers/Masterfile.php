@@ -41,8 +41,7 @@ class Masterfile extends CI_Controller {
 
 	}
 
-	public function index()
-	{
+	public function index(){
 		$this->load->view('template/header');
 		$this->load->view('template/navbar');
 		$data['count']=$this->super_model->count_custom_where('check_voucher',"saved='0'");
@@ -51,13 +50,42 @@ class Masterfile extends CI_Controller {
 
 	}
 
-	public function login()
-	{
-		$this->load->view('template/header');
-		$this->load->view('masterfile/login');
-		$this->load->view('template/footer');
+	public function login(){
+        if($this->input->post()){
+            $username=$this->input->post('username');
+            $password=$this->input->post('password');
+            $count=$this->super_model->login_user($username,$password);
+            if($count>0){   
+                $password1 =md5($this->input->post('password'));
+                $fetch=$this->super_model->select_custom_where("users", "username = '$username' AND (password = '$password' OR password = '$password1')");
+                foreach($fetch AS $d){
+                    $userid = $d->user_id;
+                    $username = $d->username;
+                    $fullname = $d->fullname;
+                }
+                $newdata = array(
+                   'user_id'=> $userid,
+                   'username'=> $username,
+                   'fullname'=> $fullname,
+                   'logged_in'=> TRUE
+                );
+                $this->session->set_userdata($newdata);
+                redirect(base_url());
+            }
+            else{
+                $this->session->set_flashdata('error_msg', 'Username And Password Do not Exist!');
+                $this->load->view('masterfile/login');      
+            }
+        } else {
+            $this->load->view('masterfile/login');    
+        }
+    }
 
-	}
+    public function user_logout(){
+        $this->session->sess_destroy();
+        echo "<script>alert('You have successfully logged out.'); 
+        window.location ='".base_url()."'; </script>";
+    }
 
 	public function report_list(){
 		$this->load->view('template/header');

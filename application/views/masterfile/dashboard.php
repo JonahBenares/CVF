@@ -25,7 +25,7 @@
                                 <b class="caret"></b>
                           </a>
                           <ul class="dropdown-menu">
-                            <li><a href="#">Logout</a></li>
+                            <li><a href="<?php echo base_url(); ?>index.php/masterfile/user_logout">Logout</a></li>
                           </ul>
                     </li>
                     <!-- <li>

@@ -353,7 +353,7 @@
                     </tr>
                     <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
-                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right">01-000001</b></h5></td>
+                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right"><!-- 01-000001 --></b></h5></td>
                     </tr>
                     <tr>
                         <td colspan="20" class="no-bord"><br></td>
@@ -484,7 +484,7 @@
                     </tr>
                     <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
-                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right">01-000001</b></h5></td>
+                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right"><!-- 01-000001 --></b></h5></td>
                     </tr> 
                     <tr>
                     	<td colspan="20" align="center"><b class="text-blue">DUPLICATE COPY</b></td>

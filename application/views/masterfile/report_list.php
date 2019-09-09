@@ -80,7 +80,7 @@
                                 <thead>
                                     <th width="15%">Date</th>
                                 	<th width="50%">Payee</th>
-                                	<th width="20%">Number</th>
+                                	<th width="20%">Reference</th>
                                 	<th width="10%">Status</th>
                                 	<th width="5%" align="center"><span class="ti-menu"></span></th>
                                 </thead>

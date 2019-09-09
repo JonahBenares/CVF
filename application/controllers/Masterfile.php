@@ -45,7 +45,8 @@ class Masterfile extends CI_Controller {
 	{
 		$this->load->view('template/header');
 		$this->load->view('template/navbar');
-		$this->load->view('masterfile/dashboard');
+		$data['count']=$this->super_model->count_custom_where('check_voucher',"saved='0'");
+		$this->load->view('masterfile/dashboard',$data);
 		$this->load->view('template/footer');
 
 	}

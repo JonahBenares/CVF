@@ -71,7 +71,7 @@
                                   <span class="ti-printer"></span> Upload File
                                 </button>                            
                             </h4>
-                            <p class="category">Here is a subtitle for this table</p>
+                            <p class="category">..</p>
 
                             <br>
                         </div>

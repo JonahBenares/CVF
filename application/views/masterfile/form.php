@@ -132,13 +132,13 @@
                                     <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <?php echo $v['cv_date'];?></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="bor-bottom bor-right bor-left"><?php echo $v['transaction_date'];?><br><br><br></td>
-                                    <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                                    <td colspan="3" class="bor-bottom bor-right"><?php echo $v['reference'];?><br><br><br></td>
-                                    <td colspan="3" class="bor-bottom bor-right"><?php echo $v['original_amount'];?><br><br><br></td>
-                                    <td colspan="4" class="bor-bottom bor-right"><br><br><br></td>
-                                    <td colspan="2" class="bor-bottom bor-right"><br><br><br></td>
-                                    <td colspan="4" class="bor-bottom bor-right"><?php echo $v['payment'];?><br><br><br></td>
+                                    <td colspan="2" class="bor-bottom bor-right bor-left">Date <br><?php echo date('m/d/Y',strtotime($v['transaction_date']));?><br><br><br></td>
+                                    <td colspan="2" class="bor-bottom bor-right">Type<br><br><br><br></td>
+                                    <td colspan="3" class="bor-bottom bor-right">Reference<br><?php echo $v['reference'];?><br><br><br></td>
+                                    <td colspan="3" class="bor-bottom bor-right">Original Amt.<br><?php echo $v['original_amount'];?><br><br><br></td>
+                                    <td colspan="4" class="bor-bottom bor-right">Balance Due<br><br><br><br></td>
+                                    <td colspan="2" class="bor-bottom bor-right">Discount<br><br><br><br></td>
+                                    <td colspan="4" class="bor-bottom bor-right">Payment<br><?php echo $v['payment'];?><br><br><br></td>
                                 </tr>
                                 <tr>
                                     <td colspan="20" class="no-bord"><br></td>

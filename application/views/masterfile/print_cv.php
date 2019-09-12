@@ -126,6 +126,9 @@
         	padding:0px 250px 0px 250px
         }
         @media print{
+            .table{
+                border-spacing:0;
+            }
         	.pad{
         	padding:0px 0px 0px 0px
         	}

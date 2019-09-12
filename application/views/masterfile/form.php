@@ -96,8 +96,9 @@
                 <div class="card">
                     <form method="POST" action = "<?php echo base_url();?>index.php/masterfile/insert_update">
                     	<div class="datatable-dashv1-list custom-datatable-overright">
-                            <table class="table">
+                            <table class="table table-s">
                                 <tr>
+                                    <td width="5%" style="border: 0px!important"><br></td>
                                     <td width="5%" style="border: 0px!important"></td>
                                     <td width="5%" style="border: 0px!important"></td>
                                     <td width="5%" style="border: 0px!important"></td>
@@ -117,7 +118,24 @@
                                     <td width="5%" style="border: 0px!important"></td>
                                     <td width="5%" style="border: 0px!important"></td>
                                     <td width="5%" style="border: 0px!important"></td>
-                                    <td width="5%" style="border: 0px!important"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="no-bord">
+                                        <center>
+                                            <img src="<?php echo base_url(); ?>assets/img/1.png" style="width:100px">
+                                        </center>
+                                    </td>
+                                    <td colspan="10" class="no-bord">
+                                        <center>
+                                            <b>POWER ONE CORPORATION </b><br>
+                                            <small>Brgy. Simaron, Sta. Isabel, Calapan City, Oriental Mindoro</small><br>
+                                            <small>TIN: 000-065-272-000/ Tel. No.: 634-0856</small><br>
+                                        </center> 
+                                    </td>
+                                    <td colspan="5" class="no-bord"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="20" class="no-bord"><br></td>
                                 </tr>
                                 <tr>
                                     <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
@@ -210,6 +228,13 @@
                                     <?php } ?>
                                 </tr>
                                 <?php } ?>
+                                <tr>
+                                    <td colspan="20"><br></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="16" class="bor-bottom bor-left bor-top">Description: <b><?php echo $v['description'];?></b></td>
+                                    <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
+                                </tr>
                             </table>
                         </div>
                         <center>

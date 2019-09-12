@@ -58,18 +58,35 @@
                             <br>
                         </div>
                     	<div class="datatable-dashv1-list custom-datatable-overright">
-                            <div class="row">
-                                <div class="col-lg-5">
-                                    <form>
-                                        <div class="form-group">
-                                            <select>
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col-lg-7">
-                                    
+                            <div style="padding: 15px">
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <form>
+                                            <div class="form-group">
+                                                Select Location
+                                                <select name="image" id="image" class="form-control" onChange="imageUpdate();"><!-- 
+                                                    <option value="nopreview.png" selected="">Select</option> -->
+                                                    <option value="1.png">logo 1</option>
+                                                    <option value="2.png">logo 2</option>
+                                                    <option value="3.png">logo 3</option>
+                                                    <option value="4.png">logo 4</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                Upload File
+                                                <input type="file" class="form-control" name="">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="button" class="btn btn-primary btn-md btn-block" value="Upload" name="">
+                                            </div>
+                                        </form>
+                                        <div style="padding-bottom: 500px"></div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                            <div class="thumbnail" style="width: 550px">
+                                                <img class="imageNews"  />
+                                            </div>                       
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -78,6 +95,14 @@
             </div>
         </div>
     </div>
-
-
-        
+    <script type="text/javascript">
+        function imageUpdate() {
+            var image = $("select#image").val();
+            var path = "<?php echo base_url(); ?>assets/img/";
+            var src = $("img.imageNews").attr({
+                src: path + image,
+                title: "Image",
+                alt: "Image"
+            });
+        }
+    </script>

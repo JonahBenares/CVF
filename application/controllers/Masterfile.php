@@ -258,8 +258,85 @@ class Masterfile extends CI_Controller {
     public function location_list(){
         $this->load->view('template/header');
         $this->load->view('template/navbar');
-        $this->load->view('masterfile/location_list');
+        $data['location']=$this->super_model->select_all_order_by('location','location_name',"ASC");
+        $this->load->view('masterfile/location_list',$data);
         $this->load->view('template/footer');
+    }
+
+    public function save_location(){
+    	$location = trim($this->input->post('location')," ");
+        $address = trim($this->input->post('address')," ");
+        $contact_no = trim($this->input->post('contact_no')," ");
+    	$error_ext=0;
+        $dest= realpath(APPPATH . '../uploads/');
+        if(!empty($_FILES['logo']['name'])){
+             $logo= basename($_FILES['logo']['name']);
+             $logo=explode('.',$logo);
+             $ext1=$logo[1];
+            
+            if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
+                $error_ext++;
+            } else {
+                 $filename=$location.'.'.$ext1;
+                 move_uploaded_file($_FILES["logo"]['tmp_name'], $dest.'/'.$filename);
+            }
+
+        } else {
+            $filename="";
+        }
+
+        $data = array(
+            'location_name'=>$location,
+            'address'=>$address,
+            'contact_no'=>$contact_no,
+            'logo'=>$filename,
+        );
+
+        if($this->super_model->insert_into("location", $data)){
+            redirect(base_url().'index.php/masterfile/location_list');
+        }
+    }
+
+    public function update_location(){
+        $location_id = trim($this->input->post('location_id')," ");
+        $location_name = trim($this->input->post('location_name')," ");
+        $address = trim($this->input->post('address')," ");
+        $contact_no = trim($this->input->post('contact_no')," ");
+        $error_ext=0;
+        $dest= realpath(APPPATH . '../uploads/');
+        if(!empty($_FILES['logo']['name'])){
+            $logo= basename($_FILES['logo']['name']);
+            $logo=explode('.',$logo);
+            $ext1=$logo[1];
+            
+            if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
+                $error_ext++;
+            } else {
+                $filename1=$location_name.'.'.$ext1;
+                echo $filename;
+                move_uploaded_file($_FILES["logo"]['tmp_name'], $dest.'\/'.$filename1);
+                $data_pic = array(
+                    'logo'=>$filename1
+                );
+                $this->super_model->update_where("location", $data_pic, "location_id", $location_id);
+            }
+        }
+
+        $data = array(
+            'location_name'=>$location_name,
+            'address'=>$address,
+            'contact_no'=>$contact_no,
+        );
+        if($this->super_model->update_where("location", $data, "location_id", $location_id)){
+            redirect(base_url().'index.php/masterfile/location_list');
+        }
+    }
+
+    public function delete_location(){
+        $location_id=$this->uri->segment(3);
+        if($this->super_model->delete_where("location", "location_id", $location_id)){
+             redirect(base_url().'index.php/masterfile/location_list');
+        }  
     }
 
     public function upload(){

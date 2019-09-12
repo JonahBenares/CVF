@@ -59,6 +59,27 @@
 		} );
 	</script>
 
+    <script type="text/javascript">
+        $(document).on("click", "#updateLocation_button", function () {
+             var location_id = $(this).attr("data-id");
+             var location_name = $(this).attr("data-name");
+             var address = $(this).attr("data-myvalue");
+             var contact_no = $(this).attr("data-trigger");
+             var logo = $(this).attr("data-bb");
+             $("#location_id").val(location_id);
+             $("#location_name").val(location_name);
+             $("#address").val(address);
+             $("#contact_no").val(contact_no);
+             $("#logo").val(logo);
+        });
+        
+        function confirmationDelete(anchor){
+            var conf = confirm('Are you sure you want to delete this record?');
+            if(conf)
+            window.location=anchor.attr("href");
+        }
+    </script>
+
 	<!-- <script src="<?php echo base_url(); ?>assets/js/data-table/bootstrap-table.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/data-table/tableExport.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/data-table/data-table-active.js"></script>

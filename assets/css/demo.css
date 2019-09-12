@@ -68,3 +68,6 @@
 .table-upgrade td:nth-child(3){
     text-align: center;
 }
+.form-control{
+	box-shadow: 0px 0px 1px 1px #e2e2e2!important
+}

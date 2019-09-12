@@ -254,4 +254,18 @@ class Masterfile extends CI_Controller {
             redirect(base_url().'index.php/masterfile/print_cv/'.$cv_id);
         }
     }
+
+    public function location_list(){
+        $this->load->view('template/header');
+        $this->load->view('template/navbar');
+        $this->load->view('masterfile/location_list');
+        $this->load->view('template/footer');
+    }
+
+    public function upload(){
+        $this->load->view('template/header');
+        $this->load->view('template/navbar');
+        $this->load->view('masterfile/upload');
+        $this->load->view('template/footer');
+    }
 }

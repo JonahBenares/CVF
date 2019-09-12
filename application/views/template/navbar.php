@@ -20,6 +20,18 @@
                     </a>
                 </li>
                 <li class="">
+                    <a href="<?php echo base_url(); ?>index.php/masterfile/location_list">
+                        <i class="ti-view-list"></i>
+                        <p>Location</p>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="<?php echo base_url(); ?>index.php/masterfile/upload">
+                        <i class="ti-upload"></i>
+                        <p>Upload</p>
+                    </a>
+                </li>
+                <li class="">
                     <a href="<?php echo base_url(); ?>index.php/masterfile/report_list">
                         <i class="ti-panel"></i>
                         <p>Report</p>

@@ -428,21 +428,21 @@
                     <tr>
                         <td colspan="5" class="no-bord">
                             <center>
-                                <img src="<?php echo base_url(); ?>assets/img/1.png" style="width:100px">
+                                <img src="<?php echo base_url(); ?>uploads/<?php echo $v['logo'];?>" style="width:100px">
                             </center>
                         </td>
                         <td colspan="10" class="no-bord">
                             <center>
-                                <b>POWER ONE CORPORATION </b><br>
-                                <small>Brgy. Simaron, Sta. Isabel, Calapan City, Oriental Mindoro</small><br>
-                                <small>TIN: 000-065-272-000/ Tel. No.: 634-0856</small><br>
+                                <b><?php echo $v['location_name'];?> </b><br>
+                                <small><?php echo $v['address'];?></small><br>
+                                <small>TIN: / Tel. No.: <?php echo $v['contact_no'];?></small><br>
                             </center> 
                         </td>
                         <td colspan="5" class="no-bord"></td>
                     </tr>
                     <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
-                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right">01-000001</b></h5></td>
+                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right"><?php echo $v['cv_no'];?></b></h5></td>
                     </tr>
                     <tr>
                         <td colspan="20" class="no-bord"><br></td>
@@ -520,21 +520,21 @@
                     <tr>
                         <td colspan="5" class="no-bord">
                             <center>
-                                <img src="<?php echo base_url(); ?>assets/img/1.png" style="width:100px">
+                                <img src="<?php echo base_url(); ?>uploads/<?php echo $v['logo'];?>" style="width:100px">
                             </center>
                         </td>
                         <td colspan="10" class="no-bord">
                             <center>
-                                <b>POWER ONE CORPORATION </b><br>
-                                <small>Brgy. Simaron, Sta. Isabel, Calapan City, Oriental Mindoro</small><br>
-                                <small>TIN: 000-065-272-000/ Tel. No.: 634-0856</small><br>
+                                <b><?php echo $v['location_name'];?> </b><br>
+                                <small><?php echo $v['address'];?></small><br>
+                                <small>TIN: / Tel. No.: <?php echo $v['contact_no'];?></small><br>
                             </center> 
                         </td>
                         <td colspan="5" class="no-bord"></td>
                     </tr>   
                     <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
-                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right">01-000001</b></h5></td>
+                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right"><?php echo $v['cv_no'];?></b></h5></td>
                     </tr> 
                     <tr>
                         <td colspan="20"><br></td>

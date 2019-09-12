@@ -19,7 +19,7 @@
                         <input type="text" class="form-control " name="address" placeholder="type here ..">
                     </div>
                     <div class="form-group">
-                        Conteact No.
+                        Contact No.
                         <input type="text" class="form-control " name="contact_no" placeholder="type here ..">
                     </div>
                     <div class="form-group">

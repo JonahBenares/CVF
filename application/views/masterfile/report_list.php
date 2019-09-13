@@ -67,9 +67,9 @@
                     <div class="card">
                         <div class="header">
                             <h4 class="title">CHECK VOUCHER
-                                <button type="button" class="btn btn-primary btn-fill pull-right" data-toggle="modal" data-target="#uploadfile">
+                                <!-- <button type="button" class="btn btn-primary btn-fill pull-right" data-toggle="modal" data-target="#uploadfile">
                                   <span class="ti-printer"></span> Upload File
-                                </button>                            
+                                </button>   -->                          
                             </h4>
                             <p class="category">..</p>
 

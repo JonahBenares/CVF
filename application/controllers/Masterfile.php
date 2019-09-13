@@ -96,8 +96,8 @@ class Masterfile extends CI_Controller {
 	}
 
 	public function upload_excel(){
-         $dest= realpath(APPPATH . '../uploads/excel/');
-         $error_ext=0;
+        $dest= realpath(APPPATH . '../uploads/excel/');
+        $error_ext=0;
         if(!empty($_FILES['csv']['name'])){
              $exc= basename($_FILES['csv']['name']);
              $exc=explode('.',$exc);
@@ -106,15 +106,38 @@ class Masterfile extends CI_Controller {
                 $error_ext++;
             } 
             else {
-                 $filename1='Quickbooks.'.$ext1;
+                $filename1='Quickbooks.'.$ext1;
+                $location = $this->input->post('location');
+
+                /*$cv_format = date("Y");
+		        $cv_prefix= $this->super_model->select_column_custom_where("check_voucher", "cv_no", "cv_date LIKE '$cv_format%'");
+		        $rows=$this->super_model->count_custom_where("check_voucher","cv_no = '$cv_prefix'");
+		        foreach($this->super_model->select_all("check_voucher") AS $cv){
+		        	foreach($this->super_model->select_row_where("cv_series","location_id",$cv->location_id) AS $c){
+		        		$location_id = $c->location_id;
+		        	}
+		        }*/
+
+		      /*  if($location_id==$location){
+			        if($rows==0){
+			            $cv_no= "CV".$cv_format."-00100";
+			        } else {
+			            $series = $this->super_model->get_max_where("cv_series", "series","location_id ='$location'");
+			            $next=$series+1;
+			            $cv_no = "CV".$cv_format."-00".$next;
+			        }
+		        }else {
+		        	$cv_no= "CV".$cv_format."-00100";
+		        }*/
+
                 if(move_uploaded_file($_FILES["csv"]['tmp_name'], $dest.'/'.$filename1)){
-                    $this->readExcel_quickbooks();
+                    $this->readExcel_quickbooks($location);
                 }   
             }
         }
     }
 
-    public function readExcel_quickbooks(){
+    public function readExcel_quickbooks($location){
         require_once(APPPATH.'../assets/js/phpexcel/Classes/PHPExcel/IOFactory.php');
         $objPHPExcel = new PHPExcel();
         $inputFileName =realpath(APPPATH.'../uploads/excel/Quickbooks.xlsx');
@@ -141,6 +164,25 @@ class Masterfile extends CI_Controller {
 		        $t = $x+2;
 		        $reference = trim($objPHPExcel->getActiveSheet(1)->getCell('B'.$t)->getValue());
 		        $transac_date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet(1)->getCell('D'.$t)->getValue()));
+		        $cur_year=date('Y');
+		        $check_existing = $this->super_model->count_custom_where("cv_series", "location_id='$location' AND year = '$cur_year'");
+		        if($check_existing==0){
+		        	  $cv_no= "CV".$cur_year."-00100";
+		        	  $left = "00100";
+		        } else {
+		        	$latest = $this->super_model->get_max_where("cv_series", "series","location_id='$location' AND year = '$cur_year'");
+		        	$series = $latest+1;
+		        	$left = str_pad($series, 5, '00', STR_PAD_LEFT);
+		        	$cv_no = "CV".$cur_year."-".$left;
+		        }	
+
+		        $cv_data= array(
+		            'year'=>$cur_year,
+		            'series'=>$left,
+		            'location_id'=>$location,
+		        );
+		        $this->super_model->insert_into("cv_series", $cv_data);
+
 	    		$data=array(
 		    		'payee'=>$pay,
 		    		'cv_date'=>$date,
@@ -151,6 +193,8 @@ class Masterfile extends CI_Controller {
 		    		'check_date'=>$date,
 		    		'reference'=>$reference,
 		    		'payment'=>$orig_amount,
+		    		'location_id'=>$location,
+		    		'cv_no'=>$cv_no,
 		    	);
 		    	$this->super_model->insert_into("check_voucher", $data);
 	    	}
@@ -161,6 +205,7 @@ class Masterfile extends CI_Controller {
 	     		$x=$x;
 	     	}
         }
+
         echo "<script>alert('Successfully Uploaded!'); window.location = 'report_list';</script>";
     }
 
@@ -170,6 +215,10 @@ class Masterfile extends CI_Controller {
 		$this->load->view('template/header');
 		$this->load->view('template/navbar');
 		foreach($this->super_model->select_row_where("check_voucher","cv_id",$cv_id) AS $cv){
+			$location_name = $this->super_model->select_column_where("location","location_name","location_id",$cv->location_id);
+			$address = $this->super_model->select_column_where("location","address","location_id",$cv->location_id);
+			$contact_no = $this->super_model->select_column_where("location","contact_no","location_id",$cv->location_id);
+			$logo = $this->super_model->select_column_where("location","logo","location_id",$cv->location_id);
 			$data['saved']=$cv->saved;
 			$data['voucher'][] = array(
 				'payee'=>$cv->payee,
@@ -187,6 +236,11 @@ class Masterfile extends CI_Controller {
 	            'released_by'=>$cv->released_by,
 	            'received_by'=>$cv->received_by,
 	            'or_no'=>$cv->or_no,
+	            'cv_no'=>$cv->cv_no,
+	            'location_name'=>$location_name,
+	            'address'=>$address,
+	            'contact_no'=>$contact_no,
+	            'logo'=>$logo,
 			);
 		}
 		$this->load->view('masterfile/form',$data);
@@ -199,6 +253,10 @@ class Masterfile extends CI_Controller {
 		$cv_id = $this->uri->segment(3);
 		$data['cv_id'] = $cv_id;
 		foreach($this->super_model->select_row_where("check_voucher","cv_id",$cv_id) AS $cv){
+			$location_name = $this->super_model->select_column_where("location","location_name","location_id",$cv->location_id);
+			$address = $this->super_model->select_column_where("location","address","location_id",$cv->location_id);
+			$contact_no = $this->super_model->select_column_where("location","contact_no","location_id",$cv->location_id);
+			$logo = $this->super_model->select_column_where("location","logo","location_id",$cv->location_id);
 			$data['saved']=$cv->saved;
 			$data['voucher'][] = array(
 				'payee'=>$cv->payee,
@@ -216,6 +274,11 @@ class Masterfile extends CI_Controller {
 	            'released_by'=>$cv->released_by,
 	            'received_by'=>$cv->received_by,
 	            'or_no'=>$cv->or_no,
+	            'cv_no'=>$cv->cv_no,
+	            'location_name'=>$location_name,
+	            'address'=>$address,
+	            'contact_no'=>$contact_no,
+	            'logo'=>$logo,
 			);
 		}
 		$this->load->view('masterfile/print_cv',$data);
@@ -253,5 +316,97 @@ class Masterfile extends CI_Controller {
         if($this->super_model->update_where("check_voucher", $data, "cv_id", $cv_id)){
             redirect(base_url().'index.php/masterfile/print_cv/'.$cv_id);
         }
+    }
+
+    public function location_list(){
+        $this->load->view('template/header');
+        $this->load->view('template/navbar');
+        $data['location']=$this->super_model->select_all_order_by('location','location_name',"ASC");
+        $this->load->view('masterfile/location_list',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function save_location(){
+    	$location = trim($this->input->post('location')," ");
+        $address = trim($this->input->post('address')," ");
+        $contact_no = trim($this->input->post('contact_no')," ");
+    	$error_ext=0;
+        $dest= realpath(APPPATH . '../uploads/');
+        if(!empty($_FILES['logo']['name'])){
+             $logo= basename($_FILES['logo']['name']);
+             $logo=explode('.',$logo);
+             $ext1=$logo[1];
+            
+            if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
+                $error_ext++;
+            } else {
+                 $filename=$location.'.'.$ext1;
+                 move_uploaded_file($_FILES["logo"]['tmp_name'], $dest.'/'.$filename);
+            }
+
+        } else {
+            $filename="";
+        }
+
+        $data = array(
+            'location_name'=>$location,
+            'address'=>$address,
+            'contact_no'=>$contact_no,
+            'logo'=>$filename,
+        );
+
+        if($this->super_model->insert_into("location", $data)){
+            redirect(base_url().'index.php/masterfile/location_list');
+        }
+    }
+
+    public function update_location(){
+        $location_id = trim($this->input->post('location_id')," ");
+        $location_name = trim($this->input->post('location_name')," ");
+        $address = trim($this->input->post('address')," ");
+        $contact_no = trim($this->input->post('contact_no')," ");
+        $error_ext=0;
+        $dest= realpath(APPPATH . '../uploads/');
+        if(!empty($_FILES['logo']['name'])){
+            $logo= basename($_FILES['logo']['name']);
+            $logo=explode('.',$logo);
+            $ext1=$logo[1];
+            
+            if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
+                $error_ext++;
+            } else {
+                $filename1=$location_name.'.'.$ext1;
+                echo $filename;
+                move_uploaded_file($_FILES["logo"]['tmp_name'], $dest.'\/'.$filename1);
+                $data_pic = array(
+                    'logo'=>$filename1
+                );
+                $this->super_model->update_where("location", $data_pic, "location_id", $location_id);
+            }
+        }
+
+        $data = array(
+            'location_name'=>$location_name,
+            'address'=>$address,
+            'contact_no'=>$contact_no,
+        );
+        if($this->super_model->update_where("location", $data, "location_id", $location_id)){
+            redirect(base_url().'index.php/masterfile/location_list');
+        }
+    }
+
+    public function delete_location(){
+        $location_id=$this->uri->segment(3);
+        if($this->super_model->delete_where("location", "location_id", $location_id)){
+             redirect(base_url().'index.php/masterfile/location_list');
+        }  
+    }
+
+    public function upload(){
+        $this->load->view('template/header');
+        $this->load->view('template/navbar');
+        $data['location']=$this->super_model->select_all_order_by('location','location_name',"ASC");
+        $this->load->view('masterfile/upload',$data);
+        $this->load->view('template/footer');
     }
 }

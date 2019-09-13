@@ -426,11 +426,23 @@
                         <td width="5%" style="border: 0px!important"></td>
                     </tr>
                     <tr>
-                        <td colspan="20" class="no-bord"><p></p></td>
+                        <td colspan="5" class="no-bord">
+                            <center>
+                                <img src="<?php echo base_url(); ?>uploads/<?php echo $v['logo'];?>" style="width:100px">
+                            </center>
+                        </td>
+                        <td colspan="10" class="no-bord">
+                            <center>
+                                <b><?php echo $v['location_name'];?> </b><br>
+                                <small><?php echo $v['address'];?></small><br>
+                                <small>TIN: / Tel. No.: <?php echo $v['contact_no'];?></small><br>
+                            </center> 
+                        </td>
+                        <td colspan="5" class="no-bord"></td>
                     </tr>
                     <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
-                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right">01-000001</b></h5></td>
+                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right"><?php echo $v['cv_no'];?></b></h5></td>
                     </tr>
                     <tr>
                         <td colspan="20" class="no-bord"><br></td>
@@ -493,8 +505,8 @@
                     	<td colspan="20"><br></td>
                     </tr>
                     <tr>
-                        <td colspan="14" class="bor-bottom bor-left bor-top"><b><?php echo $v['description'];?></b></td>
-                    	<td colspan="7" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
+                        <td colspan="16" class="bor-bottom bor-left bor-top">Description: <b><?php echo $v['description'];?></b></td>
+                    	<td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
                     </tr>
                     <tr>
                     	<td colspan="20" class="" align="center"><b class="text-blue">ORIGINAL COPY</b></td>
@@ -506,8 +518,23 @@
                     	<td colspan="20"><br></td>
                     </tr>
                     <tr>
+                        <td colspan="5" class="no-bord">
+                            <center>
+                                <img src="<?php echo base_url(); ?>uploads/<?php echo $v['logo'];?>" style="width:100px">
+                            </center>
+                        </td>
+                        <td colspan="10" class="no-bord">
+                            <center>
+                                <b><?php echo $v['location_name'];?> </b><br>
+                                <small><?php echo $v['address'];?></small><br>
+                                <small>TIN: / Tel. No.: <?php echo $v['contact_no'];?></small><br>
+                            </center> 
+                        </td>
+                        <td colspan="5" class="no-bord"></td>
+                    </tr>   
+                    <tr>
                         <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-blue">CHECK VOUCHER</b></h5></td>
-                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right">01-000001</b></h5></td>
+                        <td colspan="10" class="no-bord"><h5 class="nomarg"><b class="text-red pull-right"><?php echo $v['cv_no'];?></b></h5></td>
                     </tr> 
                     <tr>
                         <td colspan="20"><br></td>
@@ -570,8 +597,8 @@
                         <td colspan="20" class="no-bord"><br></td>
                     </tr>
                     <tr>
-                        <td colspan="14" class="bor-bottom bor-left bor-top"><b><?php echo $v['description'];?></b></td>
-                        <td colspan="7" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
+                        <td colspan="16" class="bor-bottom bor-left bor-top">Description: <b><?php echo $v['description'];?></b></td>
+                        <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
                     </tr>
                     <tr>
                     	<td colspan="20" align="center"><b class="text-blue">DUPLICATE COPY</b></td>

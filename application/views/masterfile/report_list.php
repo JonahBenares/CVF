@@ -66,15 +66,64 @@
                 <div class="col-md-12 col-lg-12 col-sm-12">
                     <div class="card">
                         <div class="header">
-                            <h4 class="title">CHECK VOUCHER
-                                <!-- <button type="button" class="btn btn-primary btn-fill pull-right" data-toggle="modal" data-target="#uploadfile">
-                                  <span class="ti-printer"></span> Upload File
-                                </button>   -->                          
-                            </h4>
-                            <p class="category">..</p>
-
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <h4 class="title">CHECK VOUCHER</h4>  
+                                    <p class="category" style="color:#040606"><b>Location Here</b></p>
+                                </div>
+                                <div class="col-lg-4">
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <select class="form-control">
+                                            <option selected="" readonly >Select Location here</option>
+                                            </select>   
+                                        </div>
+                                    </div>  
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <input type="button" class="btn btn-info btn-fill btn-block btn-xs" value="Select" name=""> 
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                           <!--  <div class="row">
+                                <div class="col-lg-12">
+                                    <center>                             
+                                        <h4 class="title">CHECK VOUCHER</h4>  
+                                    </center>      
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <select class="form-control">
+                                    <option>asdasd</option>
+                                    </select>   
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <input type="button" class="btn btn-info btn-fill btn-block btn-xs" value="Select" name=""> 
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>    
                             <br>
+                            <div class="row">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <center>
+                                        <h5>Location</h5>
+                                    </center>
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>     -->                                               
                         </div>
+                        <br>
+                        <br>
+
                     	<div class="datatable-dashv1-list custom-datatable-overright">
                             <table class="table table-hover" id="myTable">
                                 <thead>

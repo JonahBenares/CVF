@@ -22,7 +22,6 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <link href="<?php echo base_url(); ?>assets/css/font-awesome.min.css" rel="stylesheet">
     <link href='<?php echo base_url(); ?>assets/css/googleapis.css' rel='stylesheet' type='text/css'>
-
     <!-- Bootstrap core CSS     -->
     <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -39,6 +38,7 @@ if (isset($this->session->userdata['logged_in'])) {
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="<?php echo base_url(); ?>assets/css/demo.css" rel="stylesheet" />
 
+     <<!-- link href="<?php echo base_url(); ?>assets/css/animation.css" rel="stylesheet" /> -->
     <!--  Fonts and icons     -->
     <link href="<?php echo base_url(); ?>assets/css/font-awesome.min.css" rel="stylesheet">
     <link href='<?php echo base_url(); ?>assets/css/googleapis.css' rel='stylesheet' type='text/css'>

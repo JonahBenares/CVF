@@ -72,19 +72,23 @@
                                     <p class="category" style="color:#040606"><b>Location Here</b></p>
                                 </div>
                                 <div class="col-lg-4">
-                                    
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <select class="form-control">
-                                            <option selected="" readonly >Select Location here</option>
-                                            </select>   
-                                        </div>
-                                    </div>  
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <input type="button" class="btn btn-info btn-fill btn-block btn-xs" value="Select" name=""> 
-                                        </div>
-                                    </div>   
+                                    <form method="POST" action="<?php echo base_url(); ?>index.php/masterfile/generateLocation">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <select class="form-control" name = "location">
+                                                    <option selected="" value = ''>--Select Location here--</option>
+                                                    <?php foreach($location AS $l){ ?>
+                                                    <option value = "<?php echo $l->location_id;?>"><?php echo $l->location_name; ?></option>
+                                                    <?php } ?>
+                                                </select>   
+                                            </div>
+                                        </div>  
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <input type="submit" class="btn btn-info btn-fill btn-block btn-xs" value="Select" name=""> 
+                                            </div>
+                                        </div> 
+                                    </form>  
                                 </div>
                             </div>
                            <!--  <div class="row">
@@ -123,7 +127,7 @@
                         </div>
                         <br>
                         <br>
-
+                        <?php if(!empty($check)){ ?>
                     	<div class="datatable-dashv1-list custom-datatable-overright">
                             <table class="table table-hover" id="myTable">
                                 <thead>
@@ -156,6 +160,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

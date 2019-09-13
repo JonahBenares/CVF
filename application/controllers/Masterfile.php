@@ -88,12 +88,22 @@ class Masterfile extends CI_Controller {
     }
 
 	public function report_list(){
+		$location_id=$this->uri->segment(3);
 		$this->load->view('template/header');
 		$this->load->view('template/navbar');
-		$data['check']=$this->super_model->select_all_order_by('check_voucher','cv_date',"ASC");
+		$data['check']=$this->super_model->select_custom_where('check_voucher',"location_id = '$location_id'");
+		//$data['check']=$this->super_model->select_all_order_by('check_voucher','cv_date',"ASC");
+		$data['location']=$this->super_model->select_all_order_by('location','location_name',"ASC");
 		$this->load->view('masterfile/report_list',$data);
 		$this->load->view('template/footer');
 	}
+
+	public function generateLocation(){
+           $location_id= $this->input->post('location'); 
+           ?>
+           <script>
+            window.location.href ='<?php echo base_url(); ?>index.php/masterfile/report_list/<?php echo $location_id; ?>'</script> <?php
+    }
 
 	public function upload_excel(){
         $dest= realpath(APPPATH . '../uploads/excel/');

@@ -227,7 +227,6 @@
                                     <td colspan="7" class="bor-bottom bor-right"><?php echo $v['or_no'];?></td>
                                     <?php } ?>
                                 </tr>
-                                <?php } ?>
                                 <tr>
                                     <td colspan="20"><br></td>
                                 </tr>
@@ -235,6 +234,7 @@
                                     <td colspan="16" class="bor-bottom bor-left bor-top">Description: <b><?php echo $v['description'];?></b></td>
                                     <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
                                 </tr>
+                                <?php } ?>
                             </table>
                         </div>
                         <center>

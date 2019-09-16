@@ -82,7 +82,7 @@
                         </div>
                         <div class="form-group">
                             CV Start
-                            <input type="text" class="form-control " name="cvstart" placeholder="type here ..">
+                            <input type="text" class="form-control " name="cv_start" placeholder="type here .." required="required">
                         </div>
                         <div class="form-group">
                             Choose Year:
@@ -90,7 +90,7 @@
                                 <option value='' selected="selected">-Select Year-</option>
                                 <?php 
                                     $currently_selected = date('Y');
-                                    $earliest_year = 1990; 
+                                    $earliest_year = 2000; 
                                     $latest_year = date('Y'); 
                                     foreach (range( $latest_year, $earliest_year) as $i ) {
                                 ?>

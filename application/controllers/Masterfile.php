@@ -174,20 +174,23 @@ class Masterfile extends CI_Controller {
 		        $t = $x+2;
 		        $reference = trim($objPHPExcel->getActiveSheet(1)->getCell('B'.$t)->getValue());
 		        $transac_date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet(1)->getCell('D'.$t)->getValue()));
-		        $cur_year=date('Y');
-		        $check_existing = $this->super_model->count_custom_where("cv_series", "location_id='$location' AND year = '$cur_year'");
+		        //$cur_year=date('Y');
+                $year = $this->super_model->select_column_where("location","year","location_id",$location);
+		        $check_existing = $this->super_model->count_custom_where("cv_series", "location_id='$location' AND year = '$year'");
+                $cv_start = $this->super_model->select_column_where("location","cv_start","location_id",$location);
 		        if($check_existing==0){
-		        	  $cv_no= "CV".$cur_year."-00100";
+                      //$cv_no= "CV".$cur_year."-00100";
+		        	  $cv_no= $cv_start.$year."-00100";
 		        	  $left = "00100";
 		        } else {
-		        	$latest = $this->super_model->get_max_where("cv_series", "series","location_id='$location' AND year = '$cur_year'");
+		        	$latest = $this->super_model->get_max_where("cv_series", "series","location_id='$location' AND year = '$year'");
 		        	$series = $latest+1;
 		        	$left = str_pad($series, 5, '00', STR_PAD_LEFT);
-		        	$cv_no = "CV".$cur_year."-".$left;
+		        	$cv_no = $cv_start.$year."-".$left;
 		        }	
 
 		        $cv_data= array(
-		            'year'=>$cur_year,
+		            'year'=>$year,
 		            'series'=>$left,
 		            'location_id'=>$location,
 		        );
@@ -340,6 +343,8 @@ class Masterfile extends CI_Controller {
     	$location = trim($this->input->post('location')," ");
         $address = trim($this->input->post('address')," ");
         $contact_no = trim($this->input->post('contact_no')," ");
+        $cv_start = trim($this->input->post('cv_start')," ");
+        $year = trim($this->input->post('year')," ");
     	$error_ext=0;
         $dest= realpath(APPPATH . '../uploads/');
         if(!empty($_FILES['logo']['name'])){
@@ -363,6 +368,8 @@ class Masterfile extends CI_Controller {
             'address'=>$address,
             'contact_no'=>$contact_no,
             'logo'=>$filename,
+            'cv_start'=>$cv_start,
+            'year'=>$year,
         );
 
         if($this->super_model->insert_into("location", $data)){

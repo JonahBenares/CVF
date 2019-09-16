@@ -28,7 +28,7 @@
                             <div class="row">
                                 <div class="col-lg-8">
                                     <h4 class="title">CHECK VOUCHER</h4>  
-                                    <p class="category" style="color:#040606"><b>Location Here</b></p>
+                                    <p class="category" style="color:#040606"><b><?php echo $location_name; ?></b></p>
                                 </div>
                                 <div class="col-lg-4">
                                     <form method="POST" action="<?php echo base_url(); ?>index.php/masterfile/generateLocation">

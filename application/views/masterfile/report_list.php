@@ -19,62 +19,74 @@
         </div>
     </div>
 </div>
-<div class="main-panel">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar bar1"></span>
-                    <span class="icon-bar bar2"></span>
-                    <span class="icon-bar bar3"></span>
-                </button>
-                <a href="javascript:history.go(-1)" class="btn btn-success btn-md p-l-100 p-r-100"><span class="ti-arrow-left"></span> Back</a>            
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="ti-panel"></i>
-                            <p>Stats</p>
-                        </a>
-                    </li> -->
-                    <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="ti-settings"></i>
-                                <p>Settings</p>
-                                <b class="caret"></b>
-                          </a>
-                          <ul class="dropdown-menu">
-                            <li><a href="#">Logout</a></li>
-                          </ul>
-                    </li>
-                    <!-- <li>
-                        <a href="#">
-                            <i class="ti-settings"></i>
-                            <p>Settings</p>
-                        </a>
-                    </li> -->
-                </ul>
-
-            </div>
-        </div>
-    </nav>
     <div class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12 col-lg-12 col-sm-12">
                     <div class="card">
                         <div class="header">
-                            <h4 class="title">CHECK VOUCHER
-                                <!-- <button type="button" class="btn btn-primary btn-fill pull-right" data-toggle="modal" data-target="#uploadfile">
-                                  <span class="ti-printer"></span> Upload File
-                                </button>   -->                          
-                            </h4>
-                            <p class="category">..</p>
-
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <h4 class="title">CHECK VOUCHER</h4>  
+                                    <p class="category" style="color:#040606"><b>Location Here</b></p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <form method="POST" action="<?php echo base_url(); ?>index.php/masterfile/generateLocation">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <select class="form-control" name = "location">
+                                                    <option selected="" value = ''>--Select Location here--</option>
+                                                    <?php foreach($location AS $l){ ?>
+                                                    <option value = "<?php echo $l->location_id;?>"><?php echo $l->location_name; ?></option>
+                                                    <?php } ?>
+                                                </select>   
+                                            </div>
+                                        </div>  
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <input type="submit" class="btn btn-info btn-fill btn-block btn-xs" value="Select" name=""> 
+                                            </div>
+                                        </div> 
+                                    </form>  
+                                </div>
+                            </div>
+                           <!--  <div class="row">
+                                <div class="col-lg-12">
+                                    <center>                             
+                                        <h4 class="title">CHECK VOUCHER</h4>  
+                                    </center>      
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <select class="form-control">
+                                    <option>asdasd</option>
+                                    </select>   
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <input type="button" class="btn btn-info btn-fill btn-block btn-xs" value="Select" name=""> 
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>    
                             <br>
+                            <div class="row">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <center>
+                                        <h5>Location</h5>
+                                    </center>
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>     -->                                               
                         </div>
+                        <br>
+                        <br>
+                        <?php if(!empty($check)){ ?>
                     	<div class="datatable-dashv1-list custom-datatable-overright">
                             <table class="table table-hover" id="myTable">
                                 <thead>
@@ -107,6 +119,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

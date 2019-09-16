@@ -48,47 +48,6 @@
         background-color: #f0b7b7!important;
     }
 </style>
-<div class="main-panel">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar bar1"></span>
-                    <span class="icon-bar bar2"></span>
-                    <span class="icon-bar bar3"></span>
-                </button>
-                <a href="javascript:history.go(-1)" class="btn btn-success btn-md p-l-100 p-r-100"><span class="ti-arrow-left"></span> Back</a>            
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="ti-panel"></i>
-                            <p>Stats</p>
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="ti-settings"></i>
-                                <p>Settings</p>
-                                <b class="caret"></b>
-                          </a>
-                          <ul class="dropdown-menu">
-                            <li><a href="#">Logout</a></li>
-                          </ul>
-                    </li>
-                    <!-- <li>
-                        <a href="#">
-                            <i class="ti-settings"></i>
-                            <p>Settings</p>
-                        </a>
-                    </li> -->
-                </ul>
-
-            </div>
-        </div>
-    </nav>
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -227,7 +186,6 @@
                                     <td colspan="7" class="bor-bottom bor-right"><?php echo $v['or_no'];?></td>
                                     <?php } ?>
                                 </tr>
-                                <?php } ?>
                                 <tr>
                                     <td colspan="20"><br></td>
                                 </tr>
@@ -235,6 +193,7 @@
                                     <td colspan="16" class="bor-bottom bor-left bor-top">Description: <b><?php echo $v['description'];?></b></td>
                                     <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
                                 </tr>
+                                <?php } ?>
                             </table>
                         </div>
                         <center>

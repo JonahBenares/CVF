@@ -174,23 +174,23 @@ class Masterfile extends CI_Controller {
 		        $t = $x+2;
 		        $reference = trim($objPHPExcel->getActiveSheet(1)->getCell('B'.$t)->getValue());
 		        $transac_date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet(1)->getCell('D'.$t)->getValue()));
-		        //$cur_year=date('Y');
-                $year = $this->super_model->select_column_where("location","year","location_id",$location);
-		        $check_existing = $this->super_model->count_custom_where("cv_series", "location_id='$location' AND year = '$year'");
-                $cv_start = $this->super_model->select_column_where("location","cv_start","location_id",$location);
+		        $cur_year=date('Y');
+                //$year = $this->super_model->select_column_where("location","year","location_id",$location);
+		        $check_existing = $this->super_model->count_custom_where("cv_series", "location_id='$location' AND year = '$cur_year'");
+                //$cv_start = $this->super_model->select_column_where("location","cv_start","location_id",$location);
 		        if($check_existing==0){
-                      //$cv_no= "CV".$cur_year."-00100";
-		        	  $cv_no= $cv_start.$year."-00100";
+                      $cv_no= "CV".$cur_year."-00100";
+		        	  //$cv_no= $cv_start.$year."-00100";
 		        	  $left = "00100";
 		        } else {
-		        	$latest = $this->super_model->get_max_where("cv_series", "series","location_id='$location' AND year = '$year'");
+		        	$latest = $this->super_model->get_max_where("cv_series", "series","location_id='$location' AND year = '$cur_year'");
 		        	$series = $latest+1;
 		        	$left = str_pad($series, 5, '00', STR_PAD_LEFT);
-		        	$cv_no = $cv_start.$year."-".$left;
+		        	$cv_no = "CV".$cur_year."-".$left;
 		        }	
 
 		        $cv_data= array(
-		            'year'=>$year,
+		            'year'=>$cur_year,
 		            'series'=>$left,
 		            'location_id'=>$location,
 		        );
@@ -362,6 +362,21 @@ class Masterfile extends CI_Controller {
         } else {
             $filename="";
         }
+
+        $rows_head = $this->super_model->count_rows("location");
+        if($rows_head==0){
+            $location_id=1;
+        } else {
+            $max = $this->super_model->get_max("location", "location_id");
+            $location_id = $max+1;
+        }
+
+        $data_series = array(
+            'location_id'=>$location_id,
+            'series'=>$cv_start,
+            'year'=>$year,
+        );
+        $this->super_model->insert_into("cv_series", $data_series);
 
         $data = array(
             'location_name'=>$location,

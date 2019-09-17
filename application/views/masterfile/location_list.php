@@ -30,7 +30,7 @@
                                     	<td><?php echo $l->contact_no; ?></td>
                                     	<td><img style = "width:150px;" src="<?php echo base_url() ?>uploads/<?php echo $l->logo; ?>" alt="your image" /></td>
                                     	<td>
-                                    		<a href = "" type="button" class="btn btn-xs btn-info btn-fill" data-id="<?php echo $l->location_id; ?>" data-name = '<?php echo $l->location_name; ?>' data-myvalue = '<?php echo $l->address;?>' data-trigger = '<?php echo $l->contact_no; ?>' data-bb='<?php echo $l->logo; ?>' id ="updateLocation_button" data-toggle="modal" data-target="#updateLocation">
+                                    		<a href = "" type="button" class="btn btn-xs btn-info btn-fill" data-id="<?php echo $l->location_id; ?>" data-name = '<?php echo $l->location_name; ?>' data-myvalue = '<?php echo $l->address;?>' data-trigger = '<?php echo $l->contact_no; ?>' data-bb='<?php echo $l->logo; ?>' data-did = '<?php echo $l->cv_start; ?>' data-aa = '<?php echo $l->year; ?>' id ="updateLocation_button" data-toggle="modal" data-target="#updateLocation">
                                     			<span class="ti-pencil-alt"></span>
                                     		</a>
                                             <a href="<?php echo base_url(); ?>index.php/masterfile/delete_location/<?php echo $l->location_id;?>" onclick="confirmationDelete(this);return false;" class="btn btn-xs btn-danger btn-fill">

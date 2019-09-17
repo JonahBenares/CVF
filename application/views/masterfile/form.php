@@ -89,7 +89,7 @@
                                         <center>
                                             <b><?php echo $v['location_name'];?> </b><br>
                                             <small><?php echo $v['address'];?></small><br>
-                                            <small>TIN: / Tel. No.: <?php echo $v['contact_no'];?></small><br>
+                                            <small>Tel. No.: <?php echo $v['contact_no'];?></small><br>
                                         </center> 
                                     </td>
                                     <td colspan="5" class="no-bord"></td>

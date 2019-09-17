@@ -140,6 +140,14 @@
                             Logo
                             <input type="file" class="form-control " name="logo">
                         </div>
+                        <div class="form-group">
+                            CV Start
+                            <input type="text" class="form-control" id = "cv_start" name="cv_start" readonly>
+                        </div>
+                        <div class="form-group">
+                            Year
+                            <input type="text" class="form-control" id = "year" name="year" readonly>
+                        </div>
                     </div>
                     <input type="hidden" name = "location_id" id = "location_id">
                     <div class="modal-footer">

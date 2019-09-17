@@ -66,11 +66,15 @@
              var address = $(this).attr("data-myvalue");
              var contact_no = $(this).attr("data-trigger");
              var logo = $(this).attr("data-bb");
+             var cv_start = $(this).attr("data-did");
+             var year = $(this).attr("data-aa");
              $("#location_id").val(location_id);
              $("#location_name").val(location_name);
              $("#address").val(address);
              $("#contact_no").val(contact_no);
              $("#logo").val(logo);
+             $("#cv_start").val(cv_start);
+             $("#year").val(year);
         });
         
         function confirmationDelete(anchor){

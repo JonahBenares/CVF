@@ -19,6 +19,7 @@
                                     <th width="25%">Location Name</th>
                                 	<th width="25%">Address</th>
                                 	<th width="15%">Contact No.</th>
+                                    <th width="15%">CV Series</th>
                                 	<th width="15%">Logo</th>
                                 	<th width="10%" align="center"><span class="ti-menu"></span></th>
                                 </thead>
@@ -28,6 +29,7 @@
                                     	<td><?php echo $l->location_name; ?></td>
                                     	<td><?php echo $l->address; ?></td>
                                     	<td><?php echo $l->contact_no; ?></td>
+                                        <td><?php echo $l->cv_start; ?></td>
                                     	<td><img style = "width:150px;" src="<?php echo base_url() ?>uploads/<?php echo $l->logo; ?>" alt="your image" /></td>
                                     	<td>
                                     		<a href = "" type="button" class="btn btn-xs btn-info btn-fill" data-id="<?php echo $l->location_id; ?>" data-name = '<?php echo $l->location_name; ?>' data-myvalue = '<?php echo $l->address;?>' data-trigger = '<?php echo $l->contact_no; ?>' data-bb='<?php echo $l->logo; ?>' id ="updateLocation_button" data-toggle="modal" data-target="#updateLocation">

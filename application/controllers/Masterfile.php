@@ -380,6 +380,7 @@ class Masterfile extends CI_Controller {
         $this->super_model->insert_into("cv_series", $data_series);
 
         $data = array(
+            'location_id'=>$location_id,
             'location_name'=>$location,
             'address'=>$address,
             'contact_no'=>$contact_no,

@@ -91,8 +91,9 @@
                             <table class="table table-hover" id="myTable">
                                 <thead>
                                     <th width="15%">Date</th>
-                                	<th width="50%">Payee</th>
+                                	<th width="35%">Payee</th>
                                 	<th width="20%">Reference</th>
+                                    <th width="15%">CV No.</th>
                                 	<th width="10%">Status</th>
                                 	<th width="5%" align="center"><span class="ti-menu"></span></th>
                                 </thead>
@@ -102,6 +103,7 @@
                                     	<td><?php echo $c->cv_date; ?></td>
                                     	<td><?php echo $c->payee; ?></td>
                                     	<td><?php echo $c->reference; ?></td>
+                                        <td><?php echo $c->cv_no; ?></td>
                                     	<td>
                                             <?php if($c->saved == 1){ ?>
                                             <span class = "label label-info label-sm">Saved</span>

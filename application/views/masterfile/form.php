@@ -105,18 +105,79 @@
                                     <td colspan="20" class="no-bord"><br></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="10" class="bor-bottom bor-top bor-left">Payee: <?php echo $v['payee'];?></td>
-                                    <td colspan="10" class="bor-bottom bor-top bor-right">CV Date: <?php echo $v['cv_date'];?></td>
+                                    <td colspan="2" class="bor-bottom bor-top bor-left">Payee: </td>
+                                    <td colspan="7"  class="bor-bottom bor-top bor-left"> 
+                                       <select style="width: 100%;<?php echo ($saved!=0) ? "pointer-events: none;-webkit-appearance: none;-moz-appearance: none;border:0px" : ''; ?>" name="payee">
+                                            <option value=''>-Select Payee-</option>
+                                            <?php foreach($supplier AS $s){ ?>
+                                                <option value = "<?php echo $s->supplier_id;?>" <?php echo (($v['payee_id'] == $s->supplier_id) ? ' selected' : '');?>><?php echo $s->supplier_name; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </td>
+                                    <td colspan="2" class="bor-bottom bor-top bor-right"></td>
+                                    <td colspan="2" class="bor-bottom bor-top bor-right">CV Date:</td> 
+                                    <td colspan="7" class="bor-bottom bor-top bor-right">
+                                        <input  style="width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;-webkit-appearance: none;-moz-appearance: none;" : ''; ?>"  type="date" id="date1" name = "cv_date" placeholder="" value = "<?php echo $v['cv_date'];?>">
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="bor-bottom bor-right bor-left">Date <br><?php echo date('m/d/Y',strtotime($v['transaction_date']));?><br><br><br></td>
-                                    <td colspan="2" class="bor-bottom bor-right">Type<br><br><br><br></td>
-                                    <td colspan="3" class="bor-bottom bor-right">Reference<br><?php echo $v['reference'];?><br><br><br></td>
-                                    <td colspan="3" class="bor-bottom bor-right">Original Amt.<br><?php echo $v['original_amount'];?><br><br><br></td>
-                                    <td colspan="4" class="bor-bottom bor-right">Balance Due<br><br><br><br></td>
-                                    <td colspan="2" class="bor-bottom bor-right">Discount<br><br><br><br></td>
-                                    <td colspan="4" class="bor-bottom bor-right">Payment<br><?php echo $v['payment'];?><br><br><br></td>
+                                    <td colspan="2" class="bor-bottom bor-right bor-left">Date
+                                    </td>
+                                    <td colspan="2" class="bor-bottom bor-right">Type
+                                    </td>
+                                    <td colspan="3" class="bor-bottom bor-right">Reference
+                                    </td>
+                                    <td colspan="3" class="bor-bottom bor-right">Original Amt.
+                                    </td>
+                                    <td colspan="4" class="bor-bottom bor-right">Balance Due
+                                    </td>
+                                    <td colspan="2" class="bor-bottom bor-right">Discount
+                                    </td>
+                                    <td colspan="4" class="bor-bottom bor-right">Payment
+                                    </td>
                                 </tr>
+                                <tr>
+                                    <td colspan="2" class="bor-bottom bor-right bor-left">
+                                        <input style="height: 51px;width: 100%;pointer-events: none;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="date" name = "trans_date" placeholder="" value = "<?php echo date('Y-m-d');?>">
+                                    </td>
+                                    <td colspan="2" class="bor-bottom bor-right">
+                                        <input style="height: 51px;width: 100%;pointer-events: none;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "type" placeholder="" value = "<?php echo 'Bills Payment';?>">
+                                    </td>
+                                    <td colspan="3" class="bor-bottom bor-right">
+                                        <input style="width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "ref1" placeholder="" value = "<?php echo $v['reference'];?>">
+                                        <input style="width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "ref2" placeholder="" value = "<?php echo $v['reference2'];?>">
+                                    </td>
+                                    <td colspan="3" class="bor-bottom bor-right">
+                                        <input style="height: 51px;width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" id = "orig_amnt" onkeypress="return isNumberKey(this, event)" name = "original_amount" placeholder="" value = "<?php echo $v['original_amount'];?>">
+                                    </td>
+                                    <td colspan="4" class="bor-bottom bor-right">
+                                        <input style="height: 51px;width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "bal_due" id ="bal_due" onkeypress="return isNumberKey(this, event)" placeholder="" value = "<?php echo $v['balance_due'];?>">
+                                    </td>
+                                    <td colspan="2" class="bor-bottom bor-right">
+                                        <input style="height: 51px;width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "discount" onkeypress="return isNumberKey(this, event)" placeholder="" value = "<?php echo $v['discount'];?>">
+                                    </td>
+                                    <td colspan="4" class="bor-bottom bor-right">
+                                        <input style="height: 51px;width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "payment" id = "payment" onkeypress="return isNumberKey(this, event)" placeholder="" value = "<?php echo $v['payment'];?>">
+                                    </td>
+                                </tr>    
+                                <tr>
+                                    <td colspan="2" class="bor-bottom bor-right bor-left">
+                                    </td>
+                                    <td colspan="2" class="bor-bottom bor-right">
+                                    </td>
+                                    <td colspan="3" class="bor-bottom bor-right">
+                                    </td>
+                                    <td colspan="3" class="bor-bottom bor-right">
+                                    </td>
+                                    <td colspan="4" class="bor-bottom bor-right">
+                                    </td>
+                                    <td colspan="2" class="bor-bottom bor-right">
+                                    </td>
+                                    <td colspan="4" class="bor-bottom bor-right">
+                                        <span id = "error" style = "color:red;font-weight: bold"></span>
+                                    </td>
+                                </tr>
+
                                 <tr>
                                     <td colspan="20" class="no-bord"><br></td>
                                 </tr>                                    
@@ -130,10 +191,30 @@
                                     <td colspan="5" class="bor-right">Amount</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b></b></td>
-                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_no'];?></b></td>
-                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_date'];?></b></td>
-                                    <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['original_amount'];?></b></td>
+                                    <td colspan="5" align="center" class="bor-bottom bor-left bor-right">
+                                        <b>
+                                            <select style="width: 100%;<?php echo ($saved!=0) ? "pointer-events: none;-webkit-appearance: none;-moz-appearance: none;border:0px" : ''; ?>" name="bank">
+                                                <option value=''>-Select Bank-</option>
+                                                <?php foreach($bank AS $b){ ?>
+                                                    <option value = "<?php echo $b->bank_id;?>" <?php echo (($v['bank_id'] == $b->bank_id) ? ' selected' : '');?>><?php echo $b->bank_name; ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </b></td>
+                                    <td colspan="5" align="center" class="bor-bottom bor-right">
+                                        <b>
+                                            <input style="width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "check_no" placeholder="" value = "<?php echo $v['check_no'];?>">
+                                        </b>
+                                    </td>
+                                    <td colspan="5" align="center" class="bor-bottom bor-right">
+                                        <b>
+                                            <input style="width: 100%;pointer-events: none;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="date" name = "check_date" id="date2" placeholder="" value = "<?php echo $v['check_date'];?>">
+                                        </b>
+                                    </td>
+                                    <td colspan="5" align="center" class="bor-bottom bor-right">
+                                        <b>
+                                            <input style="width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" id = "dupay2" readonly placeholder="" value = "<?php echo $v['payment'];?>">
+                                        </b>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td colspan="20" class="no-bord"><br></td>
@@ -144,23 +225,11 @@
                                     <td colspan="7" class="bor-right bor-top">Approved by:</td>
                                 </tr>
                                 <tr>
-                                    <?php if($saved==0){ ?>
-                                    <td colspan="6" class="bor-right bor-left"><input type="text" name = "prepared_by" class="form-control emphasis" placeholder="type here.." name=""></td>
-                                    <?php } else{ ?>
-                                    <td colspan="6" class="bor-right bor-left"><?php echo $v['prepared_by']; ?></td>
-                                    <?php } ?>
+                                    <td colspan="6" class="bor-right bor-left"><input type="text" name = "prepared_by" class="<?php echo ($saved==0) ? "form-control emphasis": '';?>" style = "pointer-events: none;<?php echo ($saved!=0) ? "pointer-events: none;border:0px": '';?>" placeholder=""  value = "<?php echo $_SESSION['fullname']; ?>"></td>
 
-                                    <?php if($saved==0){ ?>
-                                    <td colspan="7" class="bor-right "><input type="text" name = "checked_by" class="form-control emphasis" placeholder="type here.." name=""></td>
-                                    <?php }else { ?>
-                                    <td colspan="7" class="bor-right "><?php echo $v['checked_by'];?></td>
-                                    <?php } ?>
+                                    <td colspan="7" class="bor-right "><input type="text" name = "checked_by" class="<?php echo ($saved==0) ? "form-control emphasis": '';?>" style = "<?php echo ($saved!=0) ? "pointer-events: none;border:0px": '';?>" placeholder=""  value = "<?php echo $v['checked_by'];?>"></td>
 
-                                    <?php if($saved==0){ ?>
-                                    <td colspan="7" class="bor-right "><input type="text" name = "approved_by" class="form-control emphasis" placeholder="type here.." name=""></td>
-                                    <?php }else { ?>
-                                    <td colspan="7" class="bor-right "><?php echo $v['approved_by'];?></td>
-                                    <?php } ?>
+                                    <td colspan="7" class="bor-right "><input type="text" name = "approved_by" class="<?php echo ($saved==0) ? "form-control emphasis": '';?>" style = "pointer-events: none;<?php echo ($saved!=0) ? "pointer-events: none;border:0px": '';?>" placeholder=""  value = "David C. Tan"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" class="bor-top bor-right bor-left">Released by:</td>
@@ -168,43 +237,40 @@
                                     <td colspan="7" class="bor-top bor-right">OR/SI/AR No.:</td>
                                 </tr>
                                  <tr>
-                                    <?php if($saved==0){ ?>
-                                    <td colspan="6" class="bor-bottom bor-right bor-left"><input type="text" name = "released_by" class="form-control emphasis" placeholder="type here.." name=""></td>
-                                    <?php } else { ?>
-                                    <td colspan="6" class="bor-bottom bor-right bor-left"><?php echo $v['released_by'];?></td>
-                                    <?php } ?>
-
-                                    <?php if($saved==0){ ?>
-                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "received_by" class="form-control emphasis" placeholder="type here.." name=""></td>
-                                    <?php }else { ?>
-                                    <td colspan="7" class="bor-bottom bor-right"><?php echo $v['received_by'];?></td>
-                                    <?php } ?>
-
-                                    <?php if($saved==0){ ?>
-                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "or_no" class="form-control emphasis" placeholder="type here.." name=""></td>
-                                    <?php } else { ?>
-                                    <td colspan="7" class="bor-bottom bor-right"><?php echo $v['or_no'];?></td>
-                                    <?php } ?>
+                                    <td colspan="6" class="bor-bottom bor-right bor-left"><input type="text" name = "released_by" class="<?php echo ($saved==0) ? "form-control emphasis": '';?>" style = "<?php echo ($saved!=0) ? "pointer-events: none;border:0px": '';?>" placeholder=""  value = "<?php echo $v['released_by'];?>"></td>
+                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "received_by" class="<?php echo ($saved==0) ? "form-control emphasis": '';?>" style = "<?php echo ($saved!=0) ? "pointer-events: none;border:0px": '';?>" placeholder=""  value = "<?php echo $v['received_by'];?>"></td>
+                                    <td colspan="7" class="bor-bottom bor-right"><input type="text" name = "or_no" class="<?php echo ($v['or_no']=='') ? "form-control": '';?> <?php echo ($saved==0) ? " emphasis": '';?>" style = "<?php echo ($v['or_no']!='') ? "pointer-events: none;border:0px": '';?>" placeholder=""  value = "<?php echo $v['or_no'];?>"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="20"><br></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="16" class="bor-bottom bor-left bor-top">Description: <b><?php echo $v['description'];?></b></td>
-                                    <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
+                                    <td colspan="2" class="bor-bottom bor-left bor-top">Description: 
+                                    <td colspan="14" class="bor-bottom bor-left bor-top"> 
+                                        <b>
+                                            <textarea type="text" style="width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" rows="1" name = "description" placeholder=""><?php echo $v['description'];?></textarea>
+                                            
+                                        </b>
+                                    </td>
+                                    <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><input type="text" id = "dupay" style ="<?php echo ($saved!=0) ? "border:0px;text-align: right" : ''; ?>" value = "<?php echo $v['payment'];?>" readonly></b></td>
                                 </tr>
                                 <?php } ?>
                             </table>
                         </div>
                         <center>
                             <input type="hidden" name="cv_id" value = "<?php echo $cv_id; ?>">
-                            <?php if($saved==0){ ?>
-                                <input type="submit" class="btn btn-md btn-warning btn-fill" name="button" value="Print">
-                            <?php }else { ?>
-                                <a href="<?php echo base_url(); ?>index.php/masterfile/print_cv/<?php echo $cv_id; ?>" class="btn btn-md btn-warning btn-fill">
-                                    Print
+                                <?php if($saved==0){ ?>
+                                    <input type="submit"  class = "btn btn-md btn-info btn-fill" name="save" value="Save">
+                                <?php } ?>
+                                
+                                <?php if($save_temp==0){ ?>
+                                    <input type="submit"  class="btn btn-md btn-warning btn-fill" name="print" value="Print">
+                                <?php } else { ?>
+                                    <input type="submit"  class="btn btn-md btn-warning btn-fill" name="print" value="Print">
+                                 <!-- <a href="<?php echo base_url(); ?>index.php/masterfile/print_cv/<?php echo $cv_id; ?>" class="btn btn-md btn-warning btn-fill"> 
+                                    Print -->
                                 </a>
-                            <?php } ?>
+                                <?php } ?>
                         </center>                        
                         <br>
                     </form>

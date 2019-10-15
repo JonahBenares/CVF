@@ -314,7 +314,12 @@
             /*background-size: contain!important;*/
             background-position: center center!important;
         }
-	    
+        .cancel{
+            background-image: url('<?php echo base_url(); ?>assets/img/cancel.png')!important;
+            background-repeat:no-repeat!important;
+            background-size: contain!important;
+            background-position: center center!important;
+        }
     </style>    
     <div  class="pad">
     	<form>  
@@ -401,7 +406,7 @@
                     </tr>              
                 </table>
             </div> -->
-	    	<div style="background: #fff; border:0px solid #000" >
+	    	<div style="background: #fff; border:0px solid #000" class = "<?php echo ($cancelled!=0) ? 'cancel' : ''; ?>">
 	    		<table class="table" >
                     <tr>
                         <td width="5%" style="border: 0px!important"></td>
@@ -453,12 +458,12 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="bor-bottom bor-right bor-left">Date <br><?php echo date('m/d/Y',strtotime($v['transaction_date']));?><br><br><br></td>
-                        <td colspan="2" class="bor-bottom bor-right">Type<br><br><br><br></td>
-                        <td colspan="3" class="bor-bottom bor-right">Reference<br><?php echo $v['reference'];?><br><br><br></td>
-                        <td colspan="3" class="bor-bottom bor-right">Original Amt.<br><?php echo $v['original_amount'];?><br><br><br></td>
-                        <td colspan="4" class="bor-bottom bor-right">Balance Due<br><br><br><br></td>
-                        <td colspan="2" class="bor-bottom bor-right">Discount<br><br><br><br></td>
-                        <td colspan="4" class="bor-bottom bor-right">Payment<br><?php echo $v['payment'];?><br><br><br></td>
+                        <td colspan="2" class="bor-bottom bor-right">Type<br><?php echo $v['type'];?><br><br><br></td>
+                        <td colspan="3" class="bor-bottom bor-right">Reference<br><?php echo $v['reference']."<br>".$v['reference2'];?><br><br><br></td>
+                        <td colspan="3" class="bor-bottom bor-right">Original Amt.<br><?php echo number_format($v['original_amount'],2);?><br><br><br></td>
+                        <td colspan="4" class="bor-bottom bor-right">Balance Due<br><?php echo number_format($v['balance_due'],2);?><br><br><br></td>
+                        <td colspan="2" class="bor-bottom bor-right">Discount<br><?php echo number_format($v['discount'],2);?><br><br><br></td>
+                        <td colspan="4" class="bor-bottom bor-right">Payment<br><?php echo number_format($v['payment'],2);?><br><br><br></td>
                     </tr>
                     <tr>
                     	<td colspan="20"><br></td>
@@ -473,10 +478,10 @@
                         <td colspan="5" class="bor-right">Amount</td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b><?php echo $v['bank'];?></b></td>
                         <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_no'];?></b></td>
                         <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo date('m/d/Y',strtotime($v['check_date']));?></b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['original_amount'];?></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo number_format($v['payment'],2);?></b></td>
                     </tr>
                     <tr>
                     	<td colspan="20"><br></td>
@@ -506,7 +511,7 @@
                     </tr>
                     <tr>
                         <td colspan="16" class="bor-bottom bor-left bor-top">Description: <b><?php echo $v['description'];?></b></td>
-                    	<td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
+                    	<td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo number_format($v['payment'],2);?></b></td>
                     </tr>
                     <tr>
                     	<td colspan="20" class="" align="center"><b class="text-blue">ORIGINAL COPY</b></td>
@@ -545,12 +550,12 @@
                     </tr>
                      <tr>
                         <td colspan="2" class="bor-bottom bor-right bor-left">Date <br><?php echo date('m/d/Y',strtotime($v['transaction_date']));?><br><br><br></td>
-                        <td colspan="2" class="bor-bottom bor-right">Type<br><br><br><br></td>
-                        <td colspan="3" class="bor-bottom bor-right">Reference<br><?php echo $v['reference'];?><br><br><br></td>
-                        <td colspan="3" class="bor-bottom bor-right">Original Amt.<br><?php echo $v['original_amount'];?><br><br><br></td>
-                        <td colspan="4" class="bor-bottom bor-right">Balance Due<br><br><br><br></td>
-                        <td colspan="2" class="bor-bottom bor-right">Discount<br><br><br><br></td>
-                        <td colspan="4" class="bor-bottom bor-right">Payment<br><?php echo $v['payment'];?><br><br><br></td>
+                        <td colspan="2" class="bor-bottom bor-right">Type<br><?php echo $v['type'];?><br><br><br></td>
+                        <td colspan="3" class="bor-bottom bor-right">Reference<br><?php echo $v['reference']."<br>".$v['reference2'];?><br><br><br></td>
+                        <td colspan="3" class="bor-bottom bor-right">Original Amt.<br><?php echo number_format($v['original_amount'],2);?><br><br><br></td>
+                        <td colspan="4" class="bor-bottom bor-right">Balance Due<br><?php echo number_format($v['balance_due'],2);?><br><br><br></td>
+                        <td colspan="2" class="bor-bottom bor-right">Discount<br><?php echo number_format($v['discount'],2);?><br><br><br></td>
+                        <td colspan="4" class="bor-bottom bor-right">Payment<br><?php echo number_format($v['payment'],2);?><br><br><br></td>
                     </tr>
                     <tr>
                     	<td colspan="20"><br></td>
@@ -565,10 +570,10 @@
                         <td colspan="5" class="bor-right">Amount</td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-left bor-right"><b><?php echo $v['bank'];?></b></td>
                         <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['check_no'];?></b></td>
                         <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo date('m/d/Y',strtotime($v['check_date']));?></b></td>
-                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo $v['original_amount'];?></b></td>
+                        <td colspan="5" align="center" class="bor-bottom bor-right"><b><?php echo number_format($v['original_amount'],2);?></b></td>
                     </tr>
                     <tr>
                         <td colspan="20"><br></td>
@@ -598,7 +603,7 @@
                     </tr>
                     <tr>
                         <td colspan="16" class="bor-bottom bor-left bor-top">Description: <b><?php echo $v['description'];?></b></td>
-                        <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo $v['payment'];?></b></td>
+                        <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><?php echo number_format($v['payment'],2);?></b></td>
                     </tr>
                     <tr>
                     	<td colspan="20" align="center"><b class="text-blue">DUPLICATE COPY</b></td>

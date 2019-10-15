@@ -35,7 +35,7 @@
 	<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js" type="text/javascript"></script>
 
 	<!--  Checkbox, Radio & Switch Plugins -->
-	<script src="<?php echo base_url(); ?>assets/js/bootstrap-checkbox-radio.js"></script>
+	<!-- <script src="<?php echo base_url(); ?>assets/js/bootstrap-checkbox-radio.js"></script> -->
 
 	<!--  Charts Plugin -->
 	<script src="<?php echo base_url(); ?>assets/js/chartist.min.js"></script>
@@ -76,6 +76,27 @@
              $("#cv_start").val(cv_start);
              $("#year").val(year);
         });
+
+        $(document).on("click", "#updateCancel_button", function () {
+             var cv_id = $(this).attr("data-id");
+             var loc_id = $(this).attr("data-name");
+             $("#cv_id").val(cv_id);
+             $("#loc_id").val(loc_id);
+        });
+
+        $(document).on("click", "#updateSupp_button", function () {
+             var supplier_id = $(this).attr("data-id");
+             var supplier_name = $(this).attr("data-name");
+             $("#supplier_id").val(supplier_id);
+             $("#supplier_name").val(supplier_name);
+        });
+
+        $(document).on("click", "#updateBank_button", function () {
+             var bank_id = $(this).attr("data-id");
+             var bank_name = $(this).attr("data-name");
+             $("#bank_id").val(bank_id);
+             $("#bank_name").val(bank_name);
+        });
         
         function confirmationDelete(anchor){
             var conf = confirm('Are you sure you want to delete this record?');
@@ -83,6 +104,87 @@
             window.location=anchor.attr("href");
         }
     </script>
+
+    <script type="text/javascript">
+        function imageUpdate() {
+            var image = $('select#image option:selected').attr('mytag')
+            //alert(image);
+            //var image = $("select#image").val();
+            var path = "<?php echo base_url(); ?>uploads/";
+            var src = $("img.imageNews").attr({
+                src: path + image,
+                title: "Image",
+                alt: "Image"
+            });
+        }
+
+        function onchangeLocation(){
+            //var loc= 'http://localhost/cvf_bcd/';
+            var loc= document.getElementById('base_url').value;
+            var location = document.getElementById('location').value;
+            $.ajax({
+                success: function(){
+                    window.location=loc+'index.php/masterfile/report_list/'+location;       
+                }
+            }); 
+        }
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $('#date1').change( function(){
+                 $('#date2').val($(this).val());
+            });
+        });
+
+        $(document).ready(function(){
+            $('#orig_amnt').keyup( function(){
+                 $('#dupamnt').val($(this).val());
+            });
+        });
+
+        $(document).ready(function(){
+            $('#payment').keyup( function(){
+                 $('#dupay').val($(this).val());
+            });
+        });
+
+        $(document).ready(function(){
+            $('#payment').keyup( function(){
+                 $('#dupay2').val($(this).val());
+            });
+        });
+
+        $(document).ready(function(){
+            $('#payment').blur( function(){
+                var payment = document.getElementById("payment").value;
+                var bal_due = document.getElementById("bal_due").value;
+                if(parseFloat(bal_due) < parseFloat(payment)){
+                    document.getElementById("error").innerHTML  ='Payment cannot be higher than the Balance Due.';
+                }else {
+                    $('#error').hide();
+                }
+            });
+        });
+
+        function isNumberKey(txt, evt){
+           var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode == 46) {
+                //Check if the text already contains the . character
+                if (txt.value.indexOf('.') === -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (charCode > 31
+                     && (charCode < 48 || charCode > 57))
+                    return false;
+            }
+            return true;
+        }
+    </script>
+
 
 	<!-- <script src="<?php echo base_url(); ?>assets/js/data-table/bootstrap-table.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/data-table/tableExport.js"></script>

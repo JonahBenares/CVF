@@ -198,16 +198,10 @@ class Masterfile extends CI_Controller {
             $data['cv_to']= "null";
         }
 
-        if(!empty($this->input->post('cv_no_from'))){
-            $data['cv_no_from'] = $this->input->post('cv_no_from');
+        if(!empty($this->input->post('cv_no'))){
+            $data['cv_no'] = $this->input->post('cv_no');
         } else {
-            $data['cv_no_from']= "null";
-        }
-
-        if(!empty($this->input->post('cv_no_to'))){
-            $data['cv_no_to'] = $this->input->post('cv_no_to');
-        } else {
-            $data['cv_no_to']= "null";
+            $data['cv_no']= "null";
         }
 
         if(!empty($this->input->post('bank'))){
@@ -246,11 +240,10 @@ class Masterfile extends CI_Controller {
             $filter .= "CV Date - ".$cv_from.' <strong>To</strong> '.$cv_to.", ";
         }
 
-        if(!empty($this->input->post('cv_no_from')) && !empty($this->input->post('cv_no_to'))){
-            $cv_no_from = $this->input->post('cv_no_from');
-            $cv_no_to = $this->input->post('cv_no_to');
-            $sql.=" cv_no BETWEEN '$cv_no_from' AND '$cv_no_to' AND";
-            $filter .= "CV No. - ".$cv_no_from.' <strong>To</strong> '.$cv_no_to.", ";
+        if(!empty($this->input->post('cv_no'))){
+            $cv_no = $this->input->post('cv_no');
+            $sql.=" cv_no LIKE '%$cv_no%' AND";
+            $filter .= "CV No. - ".$cv_no.", ";
         }
 
         if(!empty($this->input->post('bank'))){
@@ -307,7 +300,6 @@ class Masterfile extends CI_Controller {
         $cv_no_to=str_replace("%20"," ",$this->uri->segment(9));
         $bank=$this->uri->segment(10);
         $cancelled=$this->uri->segment(11);
-
 
         $sql="";
         $filter = " ";
@@ -395,10 +387,12 @@ class Masterfile extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $payee);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $bank);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->cv_no);
-                if($cv->cancelled==1){
+                if($cv->saved==1 && $cv->cancelled==0){
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Saved');
+                }else if($cv->cancelled==1){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Cancelled');
                 }else{
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, '');
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Pending');
                 }
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":F".$num)->applyFromArray($styleArray);
                 $num++;

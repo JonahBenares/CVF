@@ -47,7 +47,7 @@ class Masterfile extends CI_Controller {
 	public function index(){
 		$this->load->view('template/header');
 		$this->load->view('template/navbar');
-		$data['count']=$this->super_model->count_custom_where('check_voucher',"saved='0'");
+		$data['count']=$this->super_model->count_custom_where('check_voucher',"saved='0' AND cancelled='0'");
 		$this->load->view('masterfile/dashboard',$data);
 		$this->load->view('template/footer');
 
@@ -198,10 +198,16 @@ class Masterfile extends CI_Controller {
             $data['cv_to']= "null";
         }
 
-        if(!empty($this->input->post('cv_no'))){
-            $data['cv_no'] = $this->input->post('cv_no');
+        if(!empty($this->input->post('cv_no_from'))){
+            $data['cv_no_from'] = $this->input->post('cv_no_from');
         } else {
-            $data['cv_no']= "null";
+            $data['cv_no_from']= "null";
+        }
+
+        if(!empty($this->input->post('cv_no_to'))){
+            $data['cv_no_to'] = $this->input->post('cv_no_to');
+        } else {
+            $data['cv_no_to']= "null";
         }
 
         if(!empty($this->input->post('bank'))){
@@ -240,10 +246,11 @@ class Masterfile extends CI_Controller {
             $filter .= "CV Date - ".$cv_from.' <strong>To</strong> '.$cv_to.", ";
         }
 
-        if(!empty($this->input->post('cv_no'))){
-            $cv_no = $this->input->post('cv_no');
-            $sql.=" cv_no LIKE '%$cv_no%' AND";
-            $filter .= "CV No. - ".$cv_no.", ";
+        if(!empty($this->input->post('cv_no_from')) && !empty($this->input->post('cv_no_to'))){
+            $cv_no_from = $this->input->post('cv_no_from');
+            $cv_no_to = $this->input->post('cv_no_to');
+            $sql.=" cv_no BETWEEN '$cv_no_from' AND '$cv_no_to' AND";
+            $filter .= "CV No. - ".$cv_no_from.' <strong>To</strong> '.$cv_no_to.", ";
         }
 
         if(!empty($this->input->post('bank'))){
@@ -379,7 +386,7 @@ class Masterfile extends CI_Controller {
         }else {
             $location_id=$this->uri->segment(4);
             $num = 3;
-            foreach($this->super_model->select_custom_where('check_voucher',"location_id = '$location_id' AND cancelled ='0' ORDER BY payee ASC") AS $cv){
+            foreach($this->super_model->select_custom_where('check_voucher',"location_id = '$location_id' AND cancelled ='0' ORDER BY cv_no, payee DESC") AS $cv){
                 $payee = $this->super_model->select_column_where("supplier","supplier_name","supplier_id",$cv->payee);
                 $bank = $this->super_model->select_column_where("bank","bank_name","bank_id",$cv->bank);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $cv->transaction_date);

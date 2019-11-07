@@ -178,50 +178,7 @@
                                     <td colspan="4" class="bor-bottom bor-right">
                                         <span id = "error" style = "color:red;font-weight: bold"></span>
                                     </td>
-                                </tr>
-
-                                <tr>
-                                    <td colspan="2" class="bor-bottom bor-right bor-left">
-                                        <input style="height: 51px;width: 100%;pointer-events: none;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="date" name = "trans_date" placeholder="" value = "<?php echo date('Y-m-d');?>">
-                                    </td>
-                                    <td colspan="2" class="bor-bottom bor-right">
-                                        <input style="height: 51px;width: 100%;pointer-events: none;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "type" placeholder="" value = "<?php echo 'Bills Payment';?>">
-                                    </td>
-                                    <td colspan="3" class="bor-bottom bor-right">
-                                        <input style="width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "ref1" placeholder="" value = "<?php echo $v['reference'];?>">
-                                        <input style="width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "ref2" placeholder="" value = "<?php echo $v['reference2'];?>">
-                                    </td>
-                                    <td colspan="3" class="bor-bottom bor-right">
-                                        <input style="height: 51px;width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" id = "orig_amnt" onkeypress="return isNumberKey(this, event)" name = "original_amount" placeholder="" value = "<?php echo $v['original_amount'];?>">
-                                    </td>
-                                    <td colspan="4" class="bor-bottom bor-right">
-                                        <input style="height: 51px;width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "bal_due" id ="bal_due" onkeypress="return isNumberKey(this, event)" placeholder="" value = "<?php echo $v['balance_due'];?>">
-                                    </td>
-                                    <td colspan="2" class="bor-bottom bor-right">
-                                        <input style="height: 51px;width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "discount" onkeypress="return isNumberKey(this, event)" placeholder="" value = "<?php echo $v['discount'];?>">
-                                    </td>
-                                    <td colspan="4" class="bor-bottom bor-right">
-                                        <input style="height: 51px;width: 100%;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "payment" id = "payment" onkeypress="return isNumberKey(this, event)" placeholder="" value = "<?php echo $v['payment'];?>">
-                                    </td>
-                                </tr>    
-                                <tr>
-                                    <td colspan="2" class="bor-bottom bor-right bor-left">
-                                    </td>
-                                    <td colspan="2" class="bor-bottom bor-right">
-                                    </td>
-                                    <td colspan="3" class="bor-bottom bor-right">
-                                    </td>
-                                    <td colspan="3" class="bor-bottom bor-right">
-                                    </td>
-                                    <td colspan="4" class="bor-bottom bor-right">
-                                    </td>
-                                    <td colspan="2" class="bor-bottom bor-right">
-                                    </td>
-                                    <td colspan="4" class="bor-bottom bor-right">
-                                        <span id = "error" style = "color:red;font-weight: bold"></span>
-                                    </td>
-                                </tr>
-
+                                </tr>   
                                 <tr>
                                     <td colspan="20" class="no-bord"><br></td>
                                 </tr>                                    

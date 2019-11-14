@@ -140,7 +140,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="bor-bottom bor-right bor-left">
-                                        <input style="height: 51px;width: 100%;pointer-events: none;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="date" name = "trans_date" id ="trans_date" placeholder="" value = "<?php echo date('Y-m-d');?>">
+                                        <input style="height: 51px;width: 100%;pointer-events: none;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="date" name = "trans_date" id ="trans_date" placeholder="" value = "<?php echo (empty($v['transaction_date'])) ? date('Y-m-d') : $v['transaction_date'];?>">
                                     </td>
                                     <td colspan="2" class="bor-bottom bor-right">
                                         <input style="height: 51px;width: 100%;pointer-events: none;<?php echo ($saved!=0) ? "border:0px;pointer-events: none;" : ''; ?>" type="text" name = "types" id ="types" placeholder="" value = "<?php echo 'Bills Payment';?>">

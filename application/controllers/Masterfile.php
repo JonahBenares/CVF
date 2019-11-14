@@ -106,6 +106,7 @@ class Masterfile extends CI_Controller {
                 'reference'=>$cv->reference,
                 'reference2'=>$cv->reference2,
                 'cv_no'=>$cv->cv_no,
+                'amount'=>$cv->original_amount,
                 'saved'=>$cv->saved,
                 'cv_date'=>$cv->cv_date,
                 'cancelled'=>$cv->cancelled,
@@ -277,6 +278,7 @@ class Masterfile extends CI_Controller {
                 'reference'=>$cv->reference,
                 'reference2'=>$cv->reference2,
                 'cv_no'=>$cv->cv_no,
+                'amount'=>$cv->original_amount,
                 'saved'=>$cv->saved,
                 'cv_date'=>$cv->cv_date,
                 'cancelled'=>$cv->cancelled,
@@ -295,8 +297,10 @@ class Masterfile extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', "CV Date");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', "Payee");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', "Bank");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "CV No.");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "Status");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "Amount");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "CV No.");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Description");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Status");
 
         $payee=$this->uri->segment(3);
         $t_from=$this->uri->segment(4);
@@ -360,7 +364,7 @@ class Masterfile extends CI_Controller {
             )
           )
         );
-        foreach(range('A','F') as $columnID){
+        foreach(range('A','H') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
         if($filt!='' AND $payee!='loc'){
@@ -372,15 +376,20 @@ class Masterfile extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $cv->cv_date);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $payee);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $bank);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->cv_no);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->original_amount);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $cv->cv_no);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $cv->description);
                 if($cv->saved==1 && $cv->cancelled==0){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Saved');
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Saved');
                 }else if($cv->cancelled==1){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Cancelled');
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Cancelled');
                 }else{
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Pending');
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Pending');
                 }
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":F".$num)->applyFromArray($styleArray);
+
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $num++;
             }
         }else {
@@ -393,22 +402,26 @@ class Masterfile extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $cv->cv_date);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $payee);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $bank);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->cv_no);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->original_amount);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $cv->cv_no);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $cv->description);
                 if($cv->saved==1 && $cv->cancelled==0){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Saved');
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Saved');
                 }else if($cv->cancelled==1){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Cancelled');
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Cancelled');
                 }else{
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, 'Pending');
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Pending');
                 }
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":F".$num)->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
                 $num++;
             }
         }
-        $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($styleArray);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($styleArray);
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         if (file_exists($exportfilename))
         unlink($exportfilename);

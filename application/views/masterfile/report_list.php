@@ -116,7 +116,8 @@
                                 <thead>
                                     <th width="15%">Date</th>
                                 	<th width="35%">Payee</th>
-                                	<th width="20%">Reference</th>
+                                    <th width="20%">Reference</th>
+                                	<th width="20%">Amount</th>
                                     <th width="15%">CV No.</th>
                                 	<th width="5%">Status</th>
                                 	<th width="10%" align="center"><span class="ti-menu"></span></th>
@@ -127,6 +128,7 @@
                                     	<td><?php echo $c['cv_date']; ?></td>
                                     	<td><?php echo $c['payee']; ?></td>
                                     	<td><?php echo $c['reference']." / ".$c['reference2']; ?></td>
+                                        <td><?php echo number_format($c['amount'],2); ?></td>
                                         <td><?php echo $c['cv_no']; ?></td>
                                     	<td>
                                         <?php if($c['saved'] == 1 && $c['cancelled']==0){ ?>

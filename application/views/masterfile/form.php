@@ -256,6 +256,10 @@
                                     <td colspan="4" class="bor-bottom bor-right bor-top" align = "right"><b><input type="text" id = "dupay" style ="<?php echo ($saved!=0) ? "border:0px;text-align: right" : ''; ?>" value = "<?php echo $v['payment'];?>" readonly></b></td>
                                 </tr>
                                 <?php } ?>
+
+                                <tr>
+                                    <td colspan="20"><br></td>
+                                </tr>
                             </table>
                         </div>
                         <center>
@@ -277,13 +281,39 @@
                                 <?php } ?>
                         </center>                        
                         <br>
+                        
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
 
+    $(document).on('click','.add-file',function(){
+
+        $('#file_container').append(
+            '<div class="row file-row">'+
+                '<div class="col-md-10">'+
+                    '<input type="text" name="additional_files[]" class="form-control" placeholder="File Name">'+
+                '</div>'+
+                '<div class="col-md-2">'+
+                    '<button type="button" class="btn btn-danger btn-fill btn-block remove-file">'+
+                        '<span class="ti-trash"></span> Remove'+
+                    '</button>'+
+                '</div>'+
+            '</div>'
+        );
+
+    });
+
+    $(document).on('click','.remove-file',function(){
+        $(this).closest('.file-row').remove();
+    });
+
+});
+</script>
 
 
         

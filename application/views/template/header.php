@@ -46,6 +46,7 @@ if (isset($this->session->userdata['logged_in'])) {
 
 </head>
 <style type="text/css">
+	
 	#myTable_length,#myTable_filter{
 		margin: 10px
 	}
@@ -76,7 +77,57 @@ if (isset($this->session->userdata['logged_in'])) {
 	    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 	}
 
-	
+	.file-list{
+		list-style:none;
+		padding-left:0;
+		margin:0;
+	}
+
+	.file-list li{
+		margin-bottom:4px;
+	}
+
+	.file-check{
+		color:#28a745;
+		font-weight:bold;
+		margin-right:5px;
+	}
+
+	.checkbox{
+		margin-bottom:10px;
+	}
+
+	.checkbox label{
+		font-weight:500;
+		cursor:pointer;
+	}
+	.checkbox input[type="checkbox"]{
+		display:inline-block !important;
+		opacity:1 !important;
+		visibility:visible !important;
+		position:relative !important;
+		margin-right:8px;
+	}
+	.text-top{
+		vertical-align: top;
+	}
+	.file-row{
+		margin-bottom:8px;
+	}
+
+	.file-row .form-control{
+		height:38px;
+	}
+
+	.add-file,
+	.remove-file{
+		margin-top:0;
+	}
+
+	.additional-title{
+		font-weight:bold;
+		color:#337ab7;
+	}
 </style>
 <body>
 	

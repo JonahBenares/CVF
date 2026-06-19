@@ -72,6 +72,12 @@
                         <p>Report</p>
                     </a>
                 </li>
+                <li class="">
+                    <a href="<?php echo base_url(); ?>index.php/masterfile/encoded_list">
+                        <i class="ti-panel"></i>
+                        <p>Encoded List</p>
+                    </a>
+                </li>
                 <!-- <li>
                     <a href="user.html">
                         <i class="ti-user"></i>
@@ -454,7 +460,54 @@
             </div>
         </div>
     </div>
-    
+
+    <div class="modal fade"
+        id="manageFiles"
+        tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">CV File Monitoring
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </h5>                                        
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <h5>
+                            CV Number :
+                            <b>CV-100001</b>
+                        </h5>
+                        <hr>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" checked>
+                                Encoded in E-Filing
+                            </label>
+                        </div>
+                        <hr>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" checked>
+                                Additional Files
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit"
+                                class="btn btn-success btn-fill">
+                            Save Changes
+                        </button>
+                    </div
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <div class="main-panel">
     <nav class="navbar navbar-default">
         <div class="container-fluid">

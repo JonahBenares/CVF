@@ -96,6 +96,7 @@ class Masterfile extends CI_Controller {
 		$data['location_id']=$location_id;
 		$this->load->view('template/header');
 		$this->load->view('template/navbar',$this->dropdown);
+        $data['location'] = $this->super_model->select_all("location");
         $data['location_name'] = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
 		/*$data['check']=$this->super_model->select_custom_where('check_voucher',"location_id = '$location_id'");*/
         foreach($this->super_model->select_custom_where('check_voucher',"location_id = '$location_id' AND cancelled ='0' ORDER BY payee ASC") AS $cv){
@@ -735,7 +736,6 @@ class Masterfile extends CI_Controller {
         }  
     }
 
-
     public function supplier_list(){
         $this->load->view('template/header');
         $this->load->view('template/navbar');
@@ -854,6 +854,75 @@ class Masterfile extends CI_Controller {
         $this->load->view('template/navbar');
         $data['location']=$this->super_model->select_all_order_by('location','location_name',"ASC");
         $this->load->view('masterfile/upload',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function encoded_list()
+    {
+        $location_id = $this->uri->segment(3);
+
+        // Default location
+        if(empty($location_id)){
+            $location_id = 1;
+        }
+
+        $status = $this->input->get('status');
+
+        $data['location_id'] = $location_id;
+
+        // All locations for dropdown
+        $data['location'] = $this->super_model->select_all('location');
+
+        // Current location name
+        $data['location_name'] = $this->super_model->select_column_where(
+            "location",
+            "location_name",
+            "location_id",
+            $location_id
+        );
+
+        // Counts
+        $data['encoded_count'] = $this->super_model->count_custom_where(
+            "check_voucher",
+            "location_id='$location_id' AND saved='1' AND cancelled='0'"
+        );
+
+        $data['additional_count'] = $this->super_model->count_custom_where(
+            "check_voucher",
+            "location_id='$location_id' AND cancelled='0'"
+        );
+
+        // Main query
+        $where = "location_id='$location_id' AND cancelled='0'";
+
+        if($status=="encoded"){
+            $where .= " AND saved='1'";
+        }
+
+        foreach($this->super_model->select_custom_where(
+            'check_voucher',
+            $where . " ORDER BY payee ASC"
+        ) as $cv){
+
+            $payee = $this->super_model->select_column_where(
+                "supplier",
+                "supplier_name",
+                "supplier_id",
+                $cv->payee
+            );
+
+            $data['check'][] = array(
+                'cv_id'=>$cv->cv_id,
+                'payee'=>$payee,
+                'cv_no'=>$cv->cv_no,
+                'saved'=>$cv->saved,
+                'cv_date'=>$cv->cv_date,
+            );
+        }
+
+        $this->load->view('template/header');
+        $this->load->view('template/navbar');
+        $this->load->view('masterfile/encoded_list',$data);
         $this->load->view('template/footer');
     }
 }

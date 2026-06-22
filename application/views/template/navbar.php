@@ -461,51 +461,77 @@
         </div>
     </div>
 
-    <div class="modal fade"
-        id="manageFiles"
-        tabindex="-1">
+    <div class="modal fade" id="manageFiles" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">CV File Monitoring
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                    <h5 class="modal-title">
+                        CV File Monitoring
+
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal">
+
+                            <span>&times;</span>
+
                         </button>
-                    </h5>                                        
+                    </h5>
                 </div>
-                <form>
+
+                <form method="POST"
+                    action="<?php echo base_url();?>index.php/masterfile/update_monitoring">
+
                     <div class="modal-body">
+
                         <h5>
                             CV Number :
-                            <b>CV-100001</b>
+                            <b id="modal_cv_no"></b>
                         </h5>
+
+                        <input type="hidden"
+                            name="cv_id"
+                            id="modal_cv_id">
+
                         <hr>
+
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" checked>
+                                <input type="checkbox"
+                                    name="encoded"
+                                    id="modal_encoded"
+                                    value="1">
+
                                 Encoded in E-Filing
                             </label>
                         </div>
+
                         <hr>
+
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" checked>
+                                <input type="checkbox"
+                                    name="additional"
+                                    id="modal_additional"
+                                    value="1">
+
                                 Additional Files
                             </label>
                         </div>
+
                     </div>
+
                     <div class="modal-footer">
                         <button type="submit"
                                 class="btn btn-success btn-fill">
                             Save Changes
                         </button>
-                    </div
+                    </div>
+
                 </form>
 
             </div>
-
         </div>
-
     </div>
 
     <div class="main-panel">

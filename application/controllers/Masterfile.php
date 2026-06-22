@@ -858,71 +858,247 @@ class Masterfile extends CI_Controller {
     }
 
     public function encoded_list()
-    {
-        $location_id = $this->uri->segment(3);
+{
+    // Default Location
+    $location_id = $this->uri->segment(3);
 
-        // Default location
-        if(empty($location_id)){
-            $location_id = 1;
-        }
+    if(empty($location_id)){
+        $location_id = 1;
+    }
 
-        $status = $this->input->get('status');
+    // Filters
+    $filter     = $this->input->get('filter');
+    $date_from  = $this->input->get('date_from');
+    $date_to    = $this->input->get('date_to');
+    $year       = $this->input->get('year');
+    $cv_no      = $this->input->get('cv_no');
+    $encoded    = $this->input->get('encoded');
 
-        $data['location_id'] = $location_id;
+    $data['location_id'] = $location_id;
+    $data['filter']      = $filter;
 
-        // All locations for dropdown
-        $data['location'] = $this->super_model->select_all('location');
+    // Location List
+    $data['location'] = $this->super_model->select_all('location');
 
-        // Current location name
-        $data['location_name'] = $this->super_model->select_column_where(
+    // Current Location Name
+    $data['location_name'] = $this->super_model->select_column_where(
+        "location",
+        "location_name",
+        "location_id",
+        $location_id
+    );
+
+    // Counter Buttons
+    $data['encoded_count'] = $this->super_model->count_custom_where(
+        "check_voucher",
+        "location_id='$location_id'
+        AND encoded='1'
+        AND cancelled='0'"
+    );
+
+    $data['additional_count'] = $this->super_model->count_custom_where(
+        "check_voucher",
+        "location_id='$location_id'
+        AND additional='1'
+        AND cancelled='0'"
+    );
+
+    // Main Condition
+    $where = "
+        location_id='$location_id'
+        AND cancelled='0'
+    ";
+
+    // Encoded Button
+    if($filter=="encoded"){
+        $where .= " AND encoded='1'";
+    }
+
+    // Additional Button
+    if($filter=="additional"){
+        $where .= " AND additional='1'";
+    }
+
+    // Date From
+    if(!empty($date_from)){
+        $where .= " AND cv_date >= '$date_from'";
+    }
+
+    // Date To
+    if(!empty($date_to)){
+        $where .= " AND cv_date <= '$date_to'";
+    }
+
+    // Year
+    if(!empty($year)){
+        $where .= " AND YEAR(cv_date)='$year'";
+    }
+
+    // CV Number
+    if(!empty($cv_no)){
+        $where .= " AND cv_no LIKE '%$cv_no%'";
+    }
+
+    // Encoded Dropdown
+    if($encoded !== '' && $encoded !== null){
+        $where .= " AND encoded='$encoded'";
+    }
+
+    // Records
+    $data['check'] = array();
+
+    foreach(
+        $this->super_model->select_custom_where(
+            'check_voucher',
+            $where . " ORDER BY cv_date DESC"
+        ) as $cv
+    ){
+
+        $payee = $this->super_model->select_column_where(
+            "supplier",
+            "supplier_name",
+            "supplier_id",
+            $cv->payee
+        );
+
+        $location_name = $this->super_model->select_column_where(
             "location",
             "location_name",
             "location_id",
-            $location_id
+            $cv->location_id
         );
 
-        // Counts
-        $data['encoded_count'] = $this->super_model->count_custom_where(
-            "check_voucher",
-            "location_id='$location_id' AND saved='1' AND cancelled='0'"
+        $data['check'][] = array(
+            'cv_id'          => $cv->cv_id,
+            'cv_no'          => $cv->cv_no,
+            'cv_date'        => $cv->cv_date,
+            'payee'          => $payee,
+            'location_name'  => $location_name,
+            'encoded'        => $cv->encoded,
+            'additional'     => $cv->additional
         );
-
-        $data['additional_count'] = $this->super_model->count_custom_where(
-            "check_voucher",
-            "location_id='$location_id' AND cancelled='0'"
-        );
-
-        // Main query
-        $where = "location_id='$location_id' AND cancelled='0'";
-
-        if($status=="encoded"){
-            $where .= " AND saved='1'";
-        }
-
-        foreach($this->super_model->select_custom_where(
-            'check_voucher',
-            $where . " ORDER BY payee ASC"
-        ) as $cv){
-
-            $payee = $this->super_model->select_column_where(
-                "supplier",
-                "supplier_name",
-                "supplier_id",
-                $cv->payee
-            );
-
-            $data['check'][] = array(
-                'cv_id'=>$cv->cv_id,
-                'payee'=>$payee,
-                'cv_no'=>$cv->cv_no,
-                'saved'=>$cv->saved,
-                'cv_date'=>$cv->cv_date,
-            );
-        }
-
-        $this->load->view('template/header');
-        $this->load->view('template/navbar');
-        $this->load->view('masterfile/encoded_list',$data);
-        $this->load->view('template/footer');
     }
+
+    $this->load->view('template/header');
+    $this->load->view('template/navbar');
+    $this->load->view('masterfile/encoded_list', $data);
+    $this->load->view('template/footer');
+}
+
+
+public function export_encoded_list()
+{
+    $location_id = $this->uri->segment(3);
+
+    if(empty($location_id)){
+        $location_id = 1;
+    }
+
+    $filter     = $this->input->get('filter');
+    $date_from  = $this->input->get('date_from');
+    $date_to    = $this->input->get('date_to');
+    $year       = $this->input->get('year');
+    $cv_no      = $this->input->get('cv_no');
+    $encoded    = $this->input->get('encoded');
+
+    $where = "
+        location_id='$location_id'
+        AND cancelled='0'
+    ";
+
+    if($filter=="encoded"){
+        $where .= " AND encoded='1'";
+    }
+
+    if($filter=="additional"){
+        $where .= " AND additional='1'";
+    }
+
+    if(!empty($date_from)){
+        $where .= " AND cv_date >= '$date_from'";
+    }
+
+    if(!empty($date_to)){
+        $where .= " AND cv_date <= '$date_to'";
+    }
+
+    if(!empty($year)){
+        $where .= " AND YEAR(cv_date)='$year'";
+    }
+
+    if(!empty($cv_no)){
+        $where .= " AND cv_no LIKE '%$cv_no%'";
+    }
+
+    if($encoded !== '' && $encoded !== null){
+        $where .= " AND encoded='$encoded'";
+    }
+
+    header("Content-Type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=CV_File_Monitoring.xls");
+
+    echo "<table border='1'>";
+
+    echo "
+    <tr>
+        <th>CV Date</th>
+        <th>CV Number</th>
+        <th>Payee</th>
+        <th>Location</th>
+        <th>EFiling</th>
+    </tr>";
+
+    foreach(
+        $this->super_model->select_custom_where(
+            "check_voucher",
+            $where . " ORDER BY cv_date DESC"
+        ) as $cv
+    ){
+
+        $payee = $this->super_model->select_column_where(
+            "supplier",
+            "supplier_name",
+            "supplier_id",
+            $cv->payee
+        );
+
+        $location = $this->super_model->select_column_where(
+            "location",
+            "location_name",
+            "location_id",
+            $cv->location_id
+        );
+
+        echo "
+        <tr>
+            <td>".$cv->cv_date."</td>
+            <td>".$cv->cv_no."</td>
+            <td>".$payee."</td>
+            <td>".$location."</td>
+            <td>".($cv->encoded ? 'encoded' : 'pending')."</td>
+        </tr>";
+    }
+
+    echo "</table>";
+}
+
+    public function update_monitoring()
+    {
+        $cv_id = $this->input->post('cv_id');
+
+        $data = array(
+            'encoded'   => ($this->input->post('encoded')) ? 1 : 0,
+            'additional'=> ($this->input->post('additional')) ? 1 : 0,
+        );
+
+        $this->super_model->update_where(
+            'check_voucher',
+            $data,
+            'cv_id',
+            $cv_id
+        );
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    
 }

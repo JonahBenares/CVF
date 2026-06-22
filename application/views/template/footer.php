@@ -38,13 +38,13 @@
 	<!-- <script src="<?php echo base_url(); ?>assets/js/bootstrap-checkbox-radio.js"></script> -->
 
 	<!--  Charts Plugin -->
-	<script src="<?php echo base_url(); ?>assets/js/chartist.min.js"></script>
+	<!-- <script src="<?php echo base_url(); ?>assets/js/chartist.min.js"></script> -->
 
     <!--  Notifications Plugin    -->
     <script src="<?php echo base_url(); ?>assets/js/bootstrap-notify.js"></script>
 
     <!--  Google Maps Plugin    -->
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/googleapis.js"></script>
+    <!-- <script type="text/javascript" src="<?php echo base_url(); ?>assets/googleapis.js"></script> -->
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="<?php echo base_url(); ?>assets/js/paper-dashboard.js"></script>
@@ -55,7 +55,12 @@
 
 	<script type="text/javascript">			
 		$(document).ready( function () {
-		    $('#myTable').DataTable();
+		    $('#myTable').DataTable({
+                pageLength: 25,
+                deferRender: true,
+                ordering: true,
+                responsive: true
+            });
 		} );
 	</script>
 
@@ -177,7 +182,7 @@
                  $('#dupay2').val($(this).val());
             });
         });
-
+        
         $(document).ready(function(){
             $('#payment').blur( function(){
                 var payment = document.getElementById("payment").value;

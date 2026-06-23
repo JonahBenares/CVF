@@ -281,5 +281,5 @@
             ordering: true,
             responsive: true
         });
-    } );
+    } );                     
 </script>

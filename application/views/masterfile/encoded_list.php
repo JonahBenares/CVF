@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <h4 class="title" style="margin-top:8px;">
-                                    CV FILE MONITORING <?php echo $location_id; ?>
+                                    Encoded List
                                 </h4>
                             </div>
                             <div class="col-md-7">
@@ -173,8 +173,8 @@
                                 <tr>
                                     <th width="15%">Date</th>
                                     <th width="15%">CV Number</th>
-                                    <th width="20%">Location</th>
-                                    <th width="15%">E-Filing</th>
+                                    <!-- <th width="20%">Location</th> -->
+                                    <th width="2%">E-Filing</th>
                                     <!-- <th width="20%">Additional Files</th> -->
                                     <!-- <th width="5%" align="center">
                                         <span class="ti-menu"></span>
@@ -187,15 +187,15 @@
                                     <?php foreach($check as $c){ ?>
                                         <tr>
 
-                                            <td>
+                                            <td data-order="<?php echo $c['cv_date']; ?>">
                                                 <?php echo (!empty($c['cv_date']))
-                                                    ? date('m/d/Y',strtotime($c['cv_date']))
+                                                    ? date('m/d/Y', strtotime($c['cv_date']))
                                                     : ''; ?>
                                             </td>
 
                                             <td><?php echo $c['cv_no']; ?></td>
 
-                                            <td><?php echo $location_name; ?></td>
+                                            <!-- <td><?php echo $location_name; ?></td> -->
 
                                             <td>
                                                 <?php if($c['encoded']==1){ ?>
@@ -279,7 +279,8 @@
             pageLength: 25,
             deferRender: true,
             ordering: true,
-            responsive: true
+            responsive: true,
+            order: [[0, 'desc']]   // Date column (first column), newest first
         });
     } );                     
 </script>

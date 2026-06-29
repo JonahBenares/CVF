@@ -950,7 +950,7 @@ class Masterfile extends CI_Controller {
     foreach(
         $this->super_model->select_custom_where(
             'check_voucher',
-            $where . " ORDER BY cv_date DESC"
+            $where . " ORDER BY cv_date ASC"
         ) as $cv
     ){
 

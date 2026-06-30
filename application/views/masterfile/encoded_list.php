@@ -182,63 +182,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
-                                <?php if(!empty($check)){ ?>
-                                    <?php foreach($check as $c){ ?>
-                                        <tr>
-
-                                            <td data-order="<?php echo $c['cv_date']; ?>">
-                                                <?php echo (!empty($c['cv_date']))
-                                                    ? date('m/d/Y', strtotime($c['cv_date']))
-                                                    : ''; ?>
-                                            </td>
-
-                                            <td><?php echo $c['cv_no']; ?></td>
-
-                                            <!-- <td><?php echo $location_name; ?></td> -->
-
-                                            <td>
-                                                <?php if($c['encoded']==1){ ?>
-                                                    <span class="label label-success">
-                                                        Encoded
-                                                    </span>
-                                                <?php } else { ?>
-                                                    <span class="label label-default">
-                                                        Pending
-                                                    </span>
-                                                <?php } ?>
-                                            </td>
-
-                                            <!-- <td>
-                                                <?php if($c['additional']==1){ ?>
-                                                    <span class="label label-info">
-                                                        Available
-                                                    </span>
-                                                <?php } else { ?>
-                                                    <span class="label label-default">
-                                                        None
-                                                    </span>
-                                                <?php } ?>
-                                            </td> -->
-
-                                            <!-- <td align="center">
-                                                <button
-                                                    class="btn btn-warning btn-fill btn-xs manageFileBtn"
-                                                    data-toggle="modal"
-                                                    data-target="#manageFiles"
-                                                    data-cv_id="<?php echo $c['cv_id'];?>"
-                                                    data-cv_no="<?php echo $c['cv_no'];?>"
-                                                    data-encoded="<?php echo $c['encoded'];?>"
-                                                    data-additional="<?php echo $c['additional'];?>">
-
-                                                    <span class="ti-pencil"></span>
-                                                </button>
-                                            </td> -->
-
-                                        </tr>
-                                    <?php } ?>
-                                <?php } ?>
-                            </tbody>      
+                            <tbody></tbody>      
                         </table>
                     </div>
                 </div>
@@ -246,7 +190,8 @@
         </div>
     </div>
 </div>
-<script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.js"></script>
+<script src="<?php echo base_url();?>assets/js/jquery-1.10.2.js"></script>
+
 <script>
     $(document).on('click','.manageFileBtn',function(){
 
@@ -274,13 +219,21 @@
     }
 </script>
 <script>
-    $(document).ready( function () {
+    $(document).ready(function () {
         $('#encodingList').DataTable({
-            pageLength: 25,
-            deferRender: true,
+            processing: true,
+            serverSide: true,
+            pageLength: 15,
             ordering: true,
-            responsive: true,
-            order: [[0, 'desc']]   // Date column (first column), newest first
-        });
-    } );                     
+            searching: true,
+            ajax:{
+                url:"<?php echo base_url();?>index.php/masterfile/encoded_list_ajax",
+                type:"POST",
+                data:function(d){
+                    d.location_id = "<?php echo $location_id;?>";
+                }
+            },
+            order:[[0,'desc']]
+        });    
+    });               
 </script>

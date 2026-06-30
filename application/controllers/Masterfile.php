@@ -91,32 +91,331 @@ class Masterfile extends CI_Controller {
         window.location ='".base_url()."'; </script>";
     }
 
-	public function report_list(){
-        $location_id=$this->uri->segment(3);
-		$data['location_id']=$location_id;
-		$this->load->view('template/header');
-		$this->load->view('template/navbar',$this->dropdown);
+	public function report_list()
+    {
+        $location_id = $this->uri->segment(3);
+        if(empty($location_id)){
+            $location_id = 1;
+        }
+
+
+        $data['location_id'] = $location_id;
+
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
+
         $data['location'] = $this->super_model->select_all("location");
-        $data['location_name'] = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
-		/*$data['check']=$this->super_model->select_custom_where('check_voucher',"location_id = '$location_id'");*/
-        foreach($this->super_model->select_custom_where('check_voucher',"location_id = '$location_id' AND cancelled ='0' ORDER BY payee ASC") AS $cv){
-            $payee = $this->super_model->select_column_where("supplier","supplier_name","supplier_id",$cv->payee);
-            $data['check'][]=array(
-                'cv_id'=>$cv->cv_id,
-                'payee'=>$payee,
-                'reference'=>$cv->reference,
-                'reference2'=>$cv->reference2,
-                'cv_no'=>$cv->cv_no,
-                'amount'=>$cv->original_amount,
-                'saved'=>$cv->saved,
-                'cv_date'=>$cv->cv_date,
-                'cancelled'=>$cv->cancelled,
+
+        $data['location_name'] = $this->super_model->select_column_where(
+            "location",
+            "location_name",
+            "location_id",
+            $location_id
+        );
+
+        $this->load->view('masterfile/report_list',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function report_list_ajax()
+    {
+        $location_id = $this->input->post('location_id');
+
+        $draw   = intval($this->input->post('draw'));
+        $start  = intval($this->input->post('start'));
+        $length = intval($this->input->post('length'));
+
+        $search = $this->input->post('search');
+        $searchValue = isset($search['value']) ? $search['value'] : '';
+
+        $columns = array(
+            "cv.cv_date",
+            "s.supplier_name",
+            "cv.reference",
+            "cv.original_amount",
+            "cv.cv_no",
+            "cv.saved"
+        );
+
+        $order = $this->input->post('order');
+
+        $orderColumn = 0;
+        $orderDir = "DESC";
+
+        if(isset($order[0])){
+            $orderColumn = $order[0]['column'];
+            $orderDir = strtoupper($order[0]['dir']);
+        }
+
+        $orderBy = $columns[$orderColumn];
+
+        $where = "cv.location_id='$location_id'";
+
+        $payee = $this->input->post('payee');
+
+        if(!empty($payee)){
+            $where .= " AND cv.payee='$payee'";
+        }
+
+        $t_from = $this->input->post('t_from');
+
+        if(!empty($t_from)){
+            $where .= " AND cv.transaction_date>='$t_from'";
+        }
+
+        $t_to = $this->input->post('t_to');
+
+        if(!empty($t_to)){
+            $where .= " AND cv.transaction_date<='$t_to'";
+        }
+
+        $cv_from = $this->input->post('cv_from');
+
+        if(!empty($cv_from)){
+            $where .= " AND cv.cv_date>='$cv_from'";
+        }
+
+        $cv_to = $this->input->post('cv_to');
+
+        if(!empty($cv_to)){
+            $where .= " AND cv.cv_date<='$cv_to'";
+        }
+
+        $cv_no_from = $this->input->post('cv_no_from');
+
+        if(!empty($cv_no_from)){
+            $where .= " AND cv.cv_no>='$cv_no_from'";
+        }
+
+        $cv_no_to = $this->input->post('cv_no_to');
+
+        if(!empty($cv_no_to)){
+            $where .= " AND cv.cv_no<='$cv_no_to'";
+        }
+
+        $bank = $this->input->post('bank');
+
+        if(!empty($bank)){
+            $where .= " AND cv.bank='$bank'";
+        }
+
+        $cancelled = $this->input->post('cancelled');
+
+        if($cancelled==1){
+            $where .= " AND cv.cancelled='1'";
+        }else{
+            $where .= " AND cv.cancelled='0'";
+        }
+
+        if(!empty($searchValue)){
+            $searchValue = $this->db->escape_like_str($searchValue);
+
+            $where .= " AND (
+                s.supplier_name LIKE '%{$searchValue}%'
+                OR cv.cv_no LIKE '%{$searchValue}%'
+                OR cv.reference LIKE '%{$searchValue}%'
+                OR cv.reference2 LIKE '%{$searchValue}%'
+            )";
+        }
+
+        $total = $this->db->query("
+            SELECT COUNT(*) total
+            FROM check_voucher cv
+            LEFT JOIN supplier s
+            ON s.supplier_id=cv.payee
+            WHERE $where
+        ")->row()->total;
+
+        $query = $this->db->query("
+            SELECT
+                cv.cv_id,
+                cv.cv_date,
+                cv.cv_no,
+                cv.reference,
+                cv.reference2,
+                cv.original_amount,
+                cv.saved,
+                cv.cancelled,
+                s.supplier_name
+
+            FROM check_voucher cv
+
+            LEFT JOIN supplier s
+            ON s.supplier_id=cv.payee
+
+            WHERE $where
+
+            ORDER BY $orderBy $orderDir
+
+            LIMIT $start,$length
+        ");
+
+        $data = array();
+
+        foreach($query->result() as $row){
+
+            if($row->saved==1){
+                $status = "<span class='label label-info'>Saved</span>";
+
+                $view = "<a href='".base_url()."index.php/masterfile/print_cv/".$row->cv_id."' target='_blank' class='btn btn-xs btn-warning btn-fill'>
+                            <span class='ti-eye'></span>
+                        </a>";
+            }else{
+                $status = "<span class='label label-warning'>Pending</span>";
+
+                $view = "<a href='".base_url()."index.php/masterfile/form/".$row->cv_id."' target='_blank' class='btn btn-xs btn-warning btn-fill'>
+                            <span class='ti-eye'></span>
+                        </a>";
+            }
+
+            $cancel = "
+                <a class='btn btn-xs btn-danger btn-fill'
+                id='updateCancel_button'
+                data-toggle='modal'
+                data-target='#cancelFile'
+                data-id='".$row->cv_id."'
+                data-name='".$location_id."'>
+                    <span class='ti-close'></span>
+                </a>";
+
+            $data[] = array(
+                date('m/d/Y',strtotime($row->cv_date)),
+                $row->supplier_name,
+                $row->reference." / ".$row->reference2,
+                number_format($row->original_amount,2),
+                $row->cv_no,
+                $status,
+                $view." ".$cancel
             );
         }
 
-		$this->load->view('masterfile/report_list',$data);
-		$this->load->view('template/footer');
-	}
+        echo json_encode(array(
+            "draw" => $draw,
+            "recordsTotal" => $total,
+            "recordsFiltered" => $total,
+            "data" => $data
+        ));
+        
+    }
+
+    public function export_cv()
+    {
+        $location_id = $this->input->get('location_id');
+
+        $where = "cv.location_id='$location_id'";
+
+        // Payee
+        $payee = $this->input->get('payee');
+        if(!empty($payee)){
+            $where .= " AND cv.payee='$payee'";
+        }
+
+        // Transaction Date
+        $t_from = $this->input->get('t_from');
+        if(!empty($t_from)){
+            $where .= " AND cv.transaction_date>='$t_from'";
+        }
+
+        $t_to = $this->input->get('t_to');
+        if(!empty($t_to)){
+            $where .= " AND cv.transaction_date<='$t_to'";
+        }
+
+        // CV Date
+        $cv_from = $this->input->get('cv_from');
+        if(!empty($cv_from)){
+            $where .= " AND cv.cv_date>='$cv_from'";
+        }
+
+        $cv_to = $this->input->get('cv_to');
+        if(!empty($cv_to)){
+            $where .= " AND cv.cv_date<='$cv_to'";
+        }
+
+        // CV No From
+        $cv_no_from = $this->input->get('cv_no_from');
+        if(!empty($cv_no_from)){
+            $where .= " AND cv.cv_no >= '$cv_no_from'";
+        }
+
+        // CV No To
+        $cv_no_to = $this->input->get('cv_no_to');
+        if(!empty($cv_no_to)){
+            $where .= " AND cv.cv_no <= '$cv_no_to'";
+        }
+
+        // Bank
+        $bank = $this->input->get('bank');
+        if(!empty($bank)){
+            $where .= " AND cv.bank='$bank'";
+        }
+
+        // Cancelled
+        $cancelled = $this->input->get('cancelled');
+
+        if($cancelled === "0"){
+            $where .= " AND cv.cancelled='0'";
+        }
+        elseif($cancelled === "1"){
+            $where .= " AND cv.cancelled='1'";
+        }
+
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=Check_Voucher_Report.xls");
+
+        echo "<table border='1'>";
+
+        echo "
+        <tr style='background:#D9EAD3;font-weight:bold'>
+            <th>Date</th>
+            <th>Payee</th>
+            <th>Reference</th>
+            <th>Amount</th>
+            <th>CV No.</th>
+            <th>Status</th>
+            <th>Bank</th>
+        </tr>";
+
+        $query = $this->db->query("
+            SELECT
+                cv.*,
+                s.supplier_name,
+                b.bank_name
+            FROM check_voucher cv
+            LEFT JOIN supplier s
+                ON s.supplier_id = cv.payee
+            LEFT JOIN bank b
+                ON b.bank_id = cv.bank
+            WHERE $where
+            ORDER BY cv.cv_date DESC
+        ");
+
+        foreach($query->result() as $row){
+
+            if($row->cancelled == 1){
+                $status = "Cancelled";
+            }
+            elseif($row->saved == 1){
+                $status = "Saved";
+            }
+            else{
+                $status = "Pending";
+            }
+
+            echo "
+            <tr>
+                <td>".date('m/d/Y',strtotime($row->cv_date))."</td>
+                <td>".$row->supplier_name."</td>
+                <td>".$row->reference." / ".$row->reference2."</td>
+                <td align='right'>".number_format($row->original_amount,2)."</td>
+                <td>".$row->cv_no."</td>
+                <td>".$status."</td>
+                <td>".$row->bank_name."</td>
+            </tr>";
+        }
+
+        echo "</table>";
+    }
 
     public function insert_voucher(){
         $location = trim($this->input->post('location')," ");
@@ -289,151 +588,151 @@ class Masterfile extends CI_Controller {
         $this->load->view('template/footer');
     }
 
-    public function export_cv(){
-        require_once(APPPATH.'../assets/js/phpexcel/Classes/PHPExcel/IOFactory.php');
-        $objPHPExcel = new PHPExcel();
-        $exportfilename="CVF Report.xlsx";
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "CVF REPORT");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Transaction Date");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', "CV Date");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', "Payee");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', "Bank");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "Amount");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "CV No.");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Description");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Status");
+    // public function export_cv(){
+    //     require_once(APPPATH.'../assets/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+    //     $objPHPExcel = new PHPExcel();
+    //     $exportfilename="CVF Report.xlsx";
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "CVF REPORT");
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Transaction Date");
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', "CV Date");
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', "Payee");
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', "Bank");
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "Amount");
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "CV No.");
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Description");
+    //     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Status");
 
-        $payee=$this->uri->segment(3);
-        $t_from=$this->uri->segment(4);
-        $t_to=$this->uri->segment(5);
-        $cv_from=$this->uri->segment(6);
-        $cv_to=$this->uri->segment(7);
-        $cv_no_from=str_replace("%20"," ",$this->uri->segment(8));
-        $cv_no_to=str_replace("%20"," ",$this->uri->segment(9));
-        $bank=$this->uri->segment(10);
-        $cancelled=$this->uri->segment(11);
+    //     $payee=$this->uri->segment(3);
+    //     $t_from=$this->uri->segment(4);
+    //     $t_to=$this->uri->segment(5);
+    //     $cv_from=$this->uri->segment(6);
+    //     $cv_to=$this->uri->segment(7);
+    //     $cv_no_from=str_replace("%20"," ",$this->uri->segment(8));
+    //     $cv_no_to=str_replace("%20"," ",$this->uri->segment(9));
+    //     $bank=$this->uri->segment(10);
+    //     $cancelled=$this->uri->segment(11);
 
-        $sql="";
-        $filter = " ";
-        if($payee!='null'){
-            $payee = $payee;
-            $sql.=" payee = '$payee' AND";
-            $pay = $this->super_model->select_column_where("supplier", "supplier_name", "supplier_id", $payee);
-            $filter .= $pay;
-        }
+    //     $sql="";
+    //     $filter = " ";
+    //     if($payee!='null'){
+    //         $payee = $payee;
+    //         $sql.=" payee = '$payee' AND";
+    //         $pay = $this->super_model->select_column_where("supplier", "supplier_name", "supplier_id", $payee);
+    //         $filter .= $pay;
+    //     }
 
-        if($t_from!='null' && $t_to!='null'){
-            $t_from = $t_from;
-            $t_to = $t_to;
-            $sql.= " transaction_date BETWEEN '$t_from' AND '$t_to' AND";
-            $filter .= $t_from;
-        }
+    //     if($t_from!='null' && $t_to!='null'){
+    //         $t_from = $t_from;
+    //         $t_to = $t_to;
+    //         $sql.= " transaction_date BETWEEN '$t_from' AND '$t_to' AND";
+    //         $filter .= $t_from;
+    //     }
 
-        if($cv_from!='null' && $cv_to!='null'){
-            $cv_from = $cv_from;
-            $cv_to = $cv_to;
-            $sql.= " cv_date BETWEEN '$cv_from' AND '$cv_to' AND";
-            $filter .= $cv_from;
-        }
+    //     if($cv_from!='null' && $cv_to!='null'){
+    //         $cv_from = $cv_from;
+    //         $cv_to = $cv_to;
+    //         $sql.= " cv_date BETWEEN '$cv_from' AND '$cv_to' AND";
+    //         $filter .= $cv_from;
+    //     }
 
-        if($cv_no_from!='null' && $cv_no_to){
-            $cv_no_from = $cv_no_from;
-            $cv_no_to = $cv_no_to;
-            $sql.=" cv_no BETWEEN '$cv_no_from' AND '$cv_no_to' AND";
-            $filter .= $cv_no_from;
-        }
+    //     if($cv_no_from!='null' && $cv_no_to){
+    //         $cv_no_from = $cv_no_from;
+    //         $cv_no_to = $cv_no_to;
+    //         $sql.=" cv_no BETWEEN '$cv_no_from' AND '$cv_no_to' AND";
+    //         $filter .= $cv_no_from;
+    //     }
 
-        if($bank!='null'){
-            $bank = $bank;
-            $sql.=" bank = '$bank' AND";
-            $banks = $this->super_model->select_column_where("bank", "bank_name", "bank_id", $bank);
-            $filter .= $banks;
-        }
+    //     if($bank!='null'){
+    //         $bank = $bank;
+    //         $sql.=" bank = '$bank' AND";
+    //         $banks = $this->super_model->select_column_where("bank", "bank_name", "bank_id", $bank);
+    //         $filter .= $banks;
+    //     }
 
-        if($cancelled!='null'){
-            $cancelled = $cancelled;
-            $sql.=" cancelled = '$cancelled' AND";
-            $filter .= $cancelled;
-        }
+    //     if($cancelled!='null'){
+    //         $cancelled = $cancelled;
+    //         $sql.=" cancelled = '$cancelled' AND";
+    //         $filter .= $cancelled;
+    //     }
 
-        $query=substr($sql, 0, -3);
-        $filt=substr($filter, 0, -2);
-        $styleArray = array(
-          'borders' => array(
-            'allborders' => array(
-              'style' => PHPExcel_Style_Border::BORDER_THIN
-            )
-          )
-        );
-        foreach(range('A','H') as $columnID){
-            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
-        }
-        if($filt!='' AND $payee!='loc'){
-            $num = 3;
-            foreach($this->super_model->select_custom_where('check_voucher',"$query") AS $cv){
-                $payee = $this->super_model->select_column_where("supplier","supplier_name","supplier_id",$cv->payee);
-                $bank = $this->super_model->select_column_where("bank","bank_name","bank_id",$cv->bank);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $cv->transaction_date);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $cv->cv_date);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $payee);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $bank);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->original_amount);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $cv->cv_no);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $cv->description);
-                if($cv->saved==1 && $cv->cancelled==0){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Saved');
-                }else if($cv->cancelled==1){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Cancelled');
-                }else{
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Pending');
-                }
+    //     $query=substr($sql, 0, -3);
+    //     $filt=substr($filter, 0, -2);
+    //     $styleArray = array(
+    //       'borders' => array(
+    //         'allborders' => array(
+    //           'style' => PHPExcel_Style_Border::BORDER_THIN
+    //         )
+    //       )
+    //     );
+    //     foreach(range('A','H') as $columnID){
+    //         $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+    //     }
+    //     if($filt!='' AND $payee!='loc'){
+    //         $num = 3;
+    //         foreach($this->super_model->select_custom_where('check_voucher',"$query") AS $cv){
+    //             $payee = $this->super_model->select_column_where("supplier","supplier_name","supplier_id",$cv->payee);
+    //             $bank = $this->super_model->select_column_where("bank","bank_name","bank_id",$cv->bank);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $cv->transaction_date);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $cv->cv_date);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $payee);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $bank);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->original_amount);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $cv->cv_no);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $cv->description);
+    //             if($cv->saved==1 && $cv->cancelled==0){
+    //                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Saved');
+    //             }else if($cv->cancelled==1){
+    //                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Cancelled');
+    //             }else{
+    //                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Pending');
+    //             }
 
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $num++;
-            }
-        }else {
-            $location_id=$this->uri->segment(4);
-            $num = 3;
-            foreach($this->super_model->select_custom_where('check_voucher',"location_id = '$location_id' AND cancelled ='0' ORDER BY cv_no, payee DESC") AS $cv){
-                $payee = $this->super_model->select_column_where("supplier","supplier_name","supplier_id",$cv->payee);
-                $bank = $this->super_model->select_column_where("bank","bank_name","bank_id",$cv->bank);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $cv->transaction_date);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $cv->cv_date);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $payee);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $bank);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->original_amount);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $cv->cv_no);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $cv->description);
-                if($cv->saved==1 && $cv->cancelled==0){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Saved');
-                }else if($cv->cancelled==1){
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Cancelled');
-                }else{
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Pending');
-                }
-                $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
-                $num++;
-            }
-        }
-        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
-        $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($styleArray);
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        if (file_exists($exportfilename))
-        unlink($exportfilename);
-        $objWriter->save($exportfilename);
-        unset($objPHPExcel);
-        unset($objWriter);   
-        ob_end_clean();
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="CVF Report.xlsx"');
-        readfile($exportfilename);
-    }
+    //             $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
+    //             $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    //             $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+    //             $num++;
+    //         }
+    //     }else {
+    //         $location_id=$this->uri->segment(4);
+    //         $num = 3;
+    //         foreach($this->super_model->select_custom_where('check_voucher',"location_id = '$location_id' AND cancelled ='0' ORDER BY cv_no, payee DESC") AS $cv){
+    //             $payee = $this->super_model->select_column_where("supplier","supplier_name","supplier_id",$cv->payee);
+    //             $bank = $this->super_model->select_column_where("bank","bank_name","bank_id",$cv->bank);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $cv->transaction_date);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $cv->cv_date);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $payee);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $bank);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $cv->original_amount);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $cv->cv_no);
+    //             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $cv->description);
+    //             if($cv->saved==1 && $cv->cancelled==0){
+    //                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Saved');
+    //             }else if($cv->cancelled==1){
+    //                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Cancelled');
+    //             }else{
+    //                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, 'Pending');
+    //             }
+    //             $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    //             $objPHPExcel->getActiveSheet()->getStyle('E'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+    //             $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
+    //             $num++;
+    //         }
+    //     }
+    //     $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    //     $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
+    //     $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
+    //     $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($styleArray);
+    //     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    //     if (file_exists($exportfilename))
+    //     unlink($exportfilename);
+    //     $objWriter->save($exportfilename);
+    //     unset($objPHPExcel);
+    //     unset($objWriter);   
+    //     ob_end_clean();
+    //     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    //     header('Content-Disposition: attachment; filename="CVF Report.xlsx"');
+    //     readfile($exportfilename);
+    // }
 
 	/*public function generateLocation(){
            $location_id= $this->input->post('location'); 
@@ -858,229 +1157,205 @@ class Masterfile extends CI_Controller {
     }
 
     public function encoded_list()
-{
-    // Default Location
-    $location_id = $this->uri->segment(3);
+    {
+        $location_id = $this->uri->segment(3);
+        if(empty($location_id)){
+            $location_id = 1;
+        }
 
-    if(empty($location_id)){
-        $location_id = 1;
-    }
+        $data['location_id'] = $location_id;
+        $data['location'] = $this->super_model->select_all('location');
 
-    // Filters
-    $filter     = $this->input->get('filter');
-    $date_from  = $this->input->get('date_from');
-    $date_to    = $this->input->get('date_to');
-    $year       = $this->input->get('year');
-    $cv_no      = $this->input->get('cv_no');
-    $encoded    = $this->input->get('encoded');
-
-    $data['location_id'] = $location_id;
-    $data['filter']      = $filter;
-
-    // Location List
-    $data['location'] = $this->super_model->select_all('location');
-
-    // Current Location Name
-    $data['location_name'] = $this->super_model->select_column_where(
-        "location",
-        "location_name",
-        "location_id",
-        $location_id
-    );
-
-    // Counter Buttons
-    $data['encoded_count'] = $this->super_model->count_custom_where(
-        "check_voucher",
-        "location_id='$location_id'
-        AND encoded='1'
-        AND cancelled='0'"
-    );
-
-    $data['additional_count'] = $this->super_model->count_custom_where(
-        "check_voucher",
-        "location_id='$location_id'
-        AND additional='1'
-        AND cancelled='0'"
-    );
-
-    // Main Condition
-    $where = "
-        location_id='$location_id'
-        AND cancelled='0'
-    ";
-
-    // Encoded Button
-    if($filter=="encoded"){
-        $where .= " AND encoded='1'";
-    }
-
-    // Additional Button
-    if($filter=="additional"){
-        $where .= " AND additional='1'";
-    }
-
-    // Date From
-    if(!empty($date_from)){
-        $where .= " AND cv_date >= '$date_from'";
-    }
-
-    // Date To
-    if(!empty($date_to)){
-        $where .= " AND cv_date <= '$date_to'";
-    }
-
-    // Year
-    if(!empty($year)){
-        $where .= " AND YEAR(cv_date)='$year'";
-    }
-
-    // CV Number
-    if(!empty($cv_no)){
-        $where .= " AND cv_no LIKE '%$cv_no%'";
-    }
-
-    // Encoded Dropdown
-    if($encoded !== '' && $encoded !== null){
-        $where .= " AND encoded='$encoded'";
-    }
-
-    // Records
-    $data['check'] = array();
-
-    foreach(
-        $this->super_model->select_custom_where(
-            'check_voucher',
-            $where . " ORDER BY cv_date ASC"
-        ) as $cv
-    ){
-
-        $payee = $this->super_model->select_column_where(
-            "supplier",
-            "supplier_name",
-            "supplier_id",
-            $cv->payee
-        );
-
-        $location_name = $this->super_model->select_column_where(
+        $data['location_name'] = $this->super_model->select_column_where(
             "location",
             "location_name",
             "location_id",
-            $cv->location_id
+            $location_id
         );
 
-        $data['check'][] = array(
-            'cv_id'          => $cv->cv_id,
-            'cv_no'          => $cv->cv_no,
-            'cv_date'        => $cv->cv_date,
-            'payee'          => $payee,
-            'location_name'  => $location_name,
-            'encoded'        => $cv->encoded,
-            'additional'     => $cv->additional
-        );
-    }
-
-    $this->load->view('template/header');
-    $this->load->view('template/navbar');
-    $this->load->view('masterfile/encoded_list', $data);
-    $this->load->view('template/footer');
-}
-
-
-public function export_encoded_list()
-{
-    $location_id = $this->uri->segment(3);
-
-    if(empty($location_id)){
-        $location_id = 1;
-    }
-
-    $filter     = $this->input->get('filter');
-    $date_from  = $this->input->get('date_from');
-    $date_to    = $this->input->get('date_to');
-    $year       = $this->input->get('year');
-    $cv_no      = $this->input->get('cv_no');
-    $encoded    = $this->input->get('encoded');
-
-    $where = "
-        location_id='$location_id'
-        AND cancelled='0'
-    ";
-
-    if($filter=="encoded"){
-        $where .= " AND encoded='1'";
-    }
-
-    if($filter=="additional"){
-        $where .= " AND additional='1'";
-    }
-
-    if(!empty($date_from)){
-        $where .= " AND cv_date >= '$date_from'";
-    }
-
-    if(!empty($date_to)){
-        $where .= " AND cv_date <= '$date_to'";
-    }
-
-    if(!empty($year)){
-        $where .= " AND YEAR(cv_date)='$year'";
-    }
-
-    if(!empty($cv_no)){
-        $where .= " AND cv_no LIKE '%$cv_no%'";
-    }
-
-    if($encoded !== '' && $encoded !== null){
-        $where .= " AND encoded='$encoded'";
-    }
-
-    header("Content-Type: application/vnd.ms-excel");
-    header("Content-Disposition: attachment; filename=CV_File_Monitoring.xls");
-
-    echo "<table border='1'>";
-
-    echo "
-    <tr>
-        <th>CV Date</th>
-        <th>CV Number</th>
-        <th>Payee</th>
-        <th>Location</th>
-        <th>EFiling</th>
-    </tr>";
-
-    foreach(
-        $this->super_model->select_custom_where(
+        $data['encoded_count'] = $this->super_model->count_custom_where(
             "check_voucher",
-            $where . " ORDER BY cv_date DESC"
-        ) as $cv
-    ){
-
-        $payee = $this->super_model->select_column_where(
-            "supplier",
-            "supplier_name",
-            "supplier_id",
-            $cv->payee
+            "location_id='$location_id' AND encoded='1' AND cancelled='0'"
         );
 
-        $location = $this->super_model->select_column_where(
-            "location",
-            "location_name",
-            "location_id",
-            $cv->location_id
+        $data['additional_count'] = $this->super_model->count_custom_where(
+            "check_voucher",
+            "location_id='$location_id' AND additional='1' AND cancelled='0'"
         );
+
+        // Remove the big foreach()
+        $this->load->view('template/header');
+        $this->load->view('template/navbar');
+        $this->load->view('masterfile/encoded_list',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function encoded_list_ajax()
+    {
+        $location_id = $this->input->post('location_id');
+
+        $draw   = $this->input->post('draw');
+        $start  = $this->input->post('start');
+        $length = $this->input->post('length');
+
+        $search = $this->input->post('search')['value'];
+
+        $where = "cv.cancelled='0' AND cv.location_id='$location_id'";
+
+        if($search!=""){
+            $where .= " AND (
+                cv.cv_no LIKE '%".$search."%'
+                OR s.supplier_name LIKE '%".$search."%'
+            )";
+        }
+
+        $sql = "
+            SELECT
+                cv.cv_id,
+                cv.cv_no,
+                cv.cv_date,
+                cv.encoded,
+                cv.additional,
+                s.supplier_name,
+                l.location_name
+            FROM check_voucher cv
+            LEFT JOIN supplier s
+                ON s.supplier_id=cv.payee
+            LEFT JOIN location l
+                ON l.location_id=cv.location_id
+            WHERE $where
+            ORDER BY cv.cv_date DESC
+            LIMIT $start,$length
+        ";
+
+        $query = $this->db->query($sql)->result();
+
+        $count = $this->db->query("
+            SELECT COUNT(*) total
+            FROM check_voucher cv
+            LEFT JOIN supplier s
+                ON s.supplier_id=cv.payee
+            WHERE $where
+        ")->row()->total;
+
+        $data = array();
+
+        foreach($query as $row){
+
+            $status = ($row->encoded==1)
+                ? "<span class='label label-success'>Encoded</span>"
+                : "<span class='label label-default'>Pending</span>";
+
+            $data[] = array(
+                date('m/d/Y',strtotime($row->cv_date)),
+                $row->cv_no,
+                $status
+            );
+        }
+
+        echo json_encode(array(
+            "draw"=>$draw,
+            "recordsTotal"=>$count,
+            "recordsFiltered"=>$count,
+            "data"=>$data
+        ));
+    }
+
+    public function export_encoded_list()
+    {
+        $location_id = $this->uri->segment(3);
+
+        if(empty($location_id)){
+            $location_id = 1;
+        }
+
+        $filter     = $this->input->get('filter');
+        $date_from  = $this->input->get('date_from');
+        $date_to    = $this->input->get('date_to');
+        $year       = $this->input->get('year');
+        $cv_no      = $this->input->get('cv_no');
+        $encoded    = $this->input->get('encoded');
+
+        $where = "
+            location_id='$location_id'
+            AND cancelled='0'
+        ";
+
+        if($filter=="encoded"){
+            $where .= " AND encoded='1'";
+        }
+
+        if($filter=="additional"){
+            $where .= " AND additional='1'";
+        }
+
+        if(!empty($date_from)){
+            $where .= " AND cv_date >= '$date_from'";
+        }
+
+        if(!empty($date_to)){
+            $where .= " AND cv_date <= '$date_to'";
+        }
+
+        if(!empty($year)){
+            $where .= " AND YEAR(cv_date)='$year'";
+        }
+
+        if(!empty($cv_no)){
+            $where .= " AND cv_no LIKE '%$cv_no%'";
+        }
+
+        if($encoded !== '' && $encoded !== null){
+            $where .= " AND encoded='$encoded'";
+        }
+
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=CV_File_Monitoring.xls");
+
+        echo "<table border='1'>";
 
         echo "
         <tr>
-            <td>".$cv->cv_date."</td>
-            <td>".$cv->cv_no."</td>
-            <td>".$payee."</td>
-            <td>".$location."</td>
-            <td>".($cv->encoded ? 'encoded' : 'pending')."</td>
+            <th>CV Date</th>
+            <th>CV Number</th>
+            <th>Payee</th>
+            <th>Location</th>
+            <th>EFiling</th>
         </tr>";
-    }
 
-    echo "</table>";
-}
+        foreach(
+            $this->super_model->select_custom_where(
+                "check_voucher",
+                $where . " ORDER BY cv_date DESC"
+            ) as $cv
+        ){
+
+            $payee = $this->super_model->select_column_where(
+                "supplier",
+                "supplier_name",
+                "supplier_id",
+                $cv->payee
+            );
+
+            $location = $this->super_model->select_column_where(
+                "location",
+                "location_name",
+                "location_id",
+                $cv->location_id
+            );
+
+            echo "
+            <tr>
+                <td>".$cv->cv_date."</td>
+                <td>".$cv->cv_no."</td>
+                <td>".$payee."</td>
+                <td>".$location."</td>
+                <td>".($cv->encoded ? 'encoded' : 'pending')."</td>
+            </tr>";
+        }
+
+        echo "</table>";
+    }
 
     public function update_monitoring()
     {

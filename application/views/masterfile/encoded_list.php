@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -5,12 +6,12 @@
                 <div class="card">
                     <div class="header">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <h4 class="title" style="margin-top:8px;">
                                     Encoded List
                                 </h4>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-9">
                                 <div style="display: flex;justify-content:flex-end;gap: 10px;">
                                     <div class="" style="width: 400px;margin-left:10px">
                                         <form>
@@ -28,15 +29,36 @@
                                         </form>
                                     </div>
                                     <div class=" text-center">
+                                        <div class="btn-group">
+
+                                            <a href="<?php echo base_url(); ?>index.php/masterfile/encoded_list/<?php echo $location_id; ?>?status=encoded"
+                                            class="btn btn-fill <?php echo ($status=='encoded') ? 'btn-success' : 'btn-default'; ?>">
+                                                Encoded
+                                                <span class="badge"><?php echo $encoded_count; ?></span>
+                                            </a>
+
+                                            <a href="<?php echo base_url(); ?>index.php/masterfile/encoded_list/<?php echo $location_id; ?>?status=pending"
+                                            class="btn btn-fill <?php echo ($status=='pending') ? 'btn-warning' : 'btn-default'; ?>">
+                                                Pending
+                                                <span class="badge"><?php echo $pending_count; ?></span>
+                                            </a>
+
+                                            <a href="<?php echo base_url(); ?>index.php/masterfile/encoded_list/<?php echo $location_id; ?>"
+                                            class="btn btn-fill <?php echo (empty($status)) ? 'btn-primary' : 'btn-default'; ?>">
+                                                All
+                                                <span class="badge"><?php echo $all_count; ?></span>
+                                            </a>
+
+                                        </div>
                                         <!-- <div class="btn-group"> -->
-                                        <a href="<?php echo base_url(); ?>index.php/masterfile/encoded_list/<?php echo $location_id; ?>?status=encoded"
+                                        <!-- <a href="<?php echo base_url(); ?>index.php/masterfile/encoded_list/<?php echo $location_id; ?>?status=encoded"
                                             class="btn btn-success btn-fill">
 
                                             Encoded
                                             <span class="badge">
                                                 <?php echo $encoded_count; ?>
                                             </span>
-                                        </a>
+                                        </a> -->
 
                                         <!-- <a href="<?php echo base_url(); ?>index.php/masterfile/encoded_list/<?php echo $location_id; ?>?status=additional"
                                             class="btn btn-info btn-fill">
@@ -174,10 +196,10 @@
                             id="encodingList">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>CV Number</th>
-                                    <th>Payee</th>
-                                    <th>E-Filing</th>
+                                    <th class="sorting sorting_asc">Date</th>
+                                    <th class="sorting sorting_asc">CV Number</th>
+                                    <th class="sorting sorting_asc">Payee</th>
+                                    <th class="sorting sorting_asc">E-Filing</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -227,9 +249,10 @@
                 url: "<?php echo base_url(); ?>index.php/masterfile/encoded_list_ajax",
                 type: "POST",
                 data: function(d) {
-                    console.log("Year:", $('#year').val());
 
                     d.location_id = "<?php echo $location_id; ?>";
+                    d.status      = "<?php echo $this->input->get('status'); ?>";
+
                     d.date_from = $('input[name="date_from"]').val();
                     d.date_to = $('input[name="date_to"]').val();
                     d.year = "<?php echo $this->input->get('year'); ?>";
@@ -245,39 +268,29 @@
     });
 </script>
 <script>
-    $(document).ready(function() {
+$(document).ready(function () {
 
-        if (localStorage.getItem('filterPanel') == 'open') {
-            $('#filterPanel').collapse('show');
-        }
+    // Restore filter panel state
+    if (localStorage.getItem('encodedFilter') === 'closed') {
+        $('#filterPanel').hide();
+    } else {
+        $('#filterPanel').show();
+    }
 
-        $('#filterPanel').on('shown.bs.collapse', function() {
-            localStorage.setItem('filterPanel', 'open');
-        });
+    // Toggle filter panel
+    $('#toggleFilter').on('click', function () {
 
-        $('#filterPanel').on('hidden.bs.collapse', function() {
-            localStorage.setItem('filterPanel', 'closed');
-        });
+        $('#filterPanel').slideToggle(200, function () {
 
-    });
-
-    $(function(){
-
-        if(localStorage.getItem('encodedFilter') == 'open'){
-            $('#filterPanel').show();
-        }
-
-        $('#toggleFilter').click(function(){
-
-            $('#filterPanel').slideToggle(200);
-
-            if($('#filterPanel').is(':visible')){
-                localStorage.setItem('encodedFilter','open');
-            }else{
-                localStorage.setItem('encodedFilter','closed');
+            if ($('#filterPanel').is(':visible')) {
+                localStorage.setItem('encodedFilter', 'open');
+            } else {
+                localStorage.setItem('encodedFilter', 'closed');
             }
 
         });
 
     });
+
+});
 </script>

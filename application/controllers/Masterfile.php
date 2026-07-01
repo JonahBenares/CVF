@@ -1173,10 +1173,22 @@ class Masterfile extends CI_Controller {
             $location_id
         );
 
-        $data['encoded_count'] = $this->super_model->count_custom_where(
-            "check_voucher",
-            "location_id='$location_id' AND encoded='1' AND cancelled='0'"
-        );
+        $data['encoded_count'] = $this->db
+            ->where('location_id', $location_id)
+            ->where('cancelled', 0)
+            ->where('encoded', 1)
+            ->count_all_results('check_voucher');
+
+        $data['pending_count'] = $this->db
+            ->where('location_id', $location_id)
+            ->where('cancelled', 0)
+            ->where('encoded', 0)
+            ->count_all_results('check_voucher');
+
+        $data['all_count'] = $this->db
+            ->where('location_id', $location_id)
+            ->where('cancelled', 0)
+            ->count_all_results('check_voucher');
 
         $data['additional_count'] = $this->super_model->count_custom_where(
             "check_voucher",
@@ -1188,6 +1200,9 @@ class Masterfile extends CI_Controller {
             'supplier_name',
             'ASC'
         );
+
+        $status = $this->input->get('status');
+        $data['status'] = $status;
 
         // Remove the big foreach()
         $this->load->view('template/header');
@@ -1214,6 +1229,15 @@ class Masterfile extends CI_Controller {
         $search = $this->input->post('search')['value'];
 
         $where = "cv.cancelled='0' AND cv.location_id='$location_id'";
+        
+        $status = $this->input->post('status');
+
+        if ($status == 'encoded') {
+            $where .= " AND cv.encoded = '1'";
+        }
+        elseif ($status == 'pending') {
+            $where .= " AND cv.encoded = '0'";
+        }
 
         if(!empty($date_from)){
             $where .= " AND cv.cv_date >= '$date_from'";
@@ -1247,6 +1271,32 @@ class Masterfile extends CI_Controller {
                 OR s.supplier_name LIKE '%$search%'
             )";
         }
+
+        $order = $this->input->post('order');
+
+        $columns = array(
+            0 => 'cv.cv_date',
+            1 => 'cv.cv_no',
+            2 => 's.supplier_name',
+            3 => 'cv.encoded'
+        );
+
+        $orderColumn = 'cv.cv_date';
+        $orderDir = 'DESC';
+
+        if (!empty($order)) {
+            $columnIndex = $order[0]['column'];
+            $orderDir = strtoupper($order[0]['dir']);
+
+            if (isset($columns[$columnIndex])) {
+                $orderColumn = $columns[$columnIndex];
+            }
+
+            if ($orderDir != 'ASC' && $orderDir != 'DESC') {
+                $orderDir = 'DESC';
+            }
+        }
+
         $sql = "
             SELECT
                 cv.cv_id,
@@ -1262,7 +1312,7 @@ class Masterfile extends CI_Controller {
             LEFT JOIN location l
                 ON l.location_id = cv.location_id
             WHERE $where
-            ORDER BY cv.cv_date DESC
+            ORDER BY $orderColumn $orderDir
             LIMIT $start, $length
         ";
 

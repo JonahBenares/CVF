@@ -36,9 +36,7 @@
                                 <div style="display:flex;justify-content:flex-end;gap:10px">
 
                                     <div style="width:350px">
-                                        <select class="form-control"
-                                            id="location"
-                                            onchange="onchangeLocation();">
+                                        <select class="form-control" id="location">
                                             <?php foreach ($location as $l) { ?>
                                                 <option value="<?php echo $l->location_id; ?>"
                                                     <?php echo ($location_id == $l->location_id) ? 'selected' : ''; ?>>
@@ -58,7 +56,7 @@
                                     <button class="btn btn-default btn-fill"
                                         data-toggle="collapse"
                                         data-target="#filterPanel">
-                                        <span class="ti-filter"></span>
+                                        <span class="ti-filter"></span> Filter
                                     </button>
 
                                     <!-- <button class="btn btn-success btn-fill"
@@ -85,228 +83,148 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h5 style="margin-top:0;margin-bottom:20px;">
+                                    <h5 style="margin-top:0;margin-bottom:0px;">
                                         <span class="ti-filter"></span>
                                         Filter Check Voucher
                                     </h5>
                                 </div>
                             </div>
-
-                            <!-- ROW 1 -->
-                            <div class="row">
-
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="ti-user"></span>
-                                            Payee
-                                        </label>
-
-                                        <select class="form-control" id="payee">
-                                            <option value="">All Payees</option>
-
-                                            <?php foreach ($supplier as $s) { ?>
-
-                                                <option value="<?php echo $s->supplier_id; ?>">
-                                                    <?php echo $s->supplier_name; ?>
-                                                </option>
-
-                                            <?php } ?>
-
-                                        </select>
+                            <div class="panel-body">
+                                <!-- ROW 1 -->
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label>
+                                                <span class="ti-user"></span>
+                                                Payee
+                                            </label>
+                                            <select class="form-control" id="payee">
+                                                <option value="">All Payees</option>
+                                                <?php foreach ($supplier as $s) { ?>
+                                                    <option value="<?php echo $s->supplier_id; ?>">
+                                                        <?php echo $s->supplier_name; ?>
+                                                    </option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>
+                                                <span class="ti-credit-card"></span>
+                                                Bank
+                                            </label>
+                                            <select class="form-control" id="bank">
+                                                <option value="">All Banks</option>
+                                                <?php foreach ($bank as $b) { ?>
+                                                    <option value="<?php echo $b->bank_id; ?>">
+                                                        <?php echo $b->bank_name; ?>
+                                                    </option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>
+                                                <span class="ti-close"></span>
+                                                Cancelled
+                                            </label>
+                                            <select class="form-control" id="cancelled">
+                                                <option value="">All</option>
+                                                <option value="0">Active Only</option>
+                                                <option value="1">Cancelled Only</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- ROW 2 -->
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Transaction Date From</label>
+                                            <input
+                                                type="date"
+                                                id="t_from"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Transaction Date To</label>
+                                            <input
+                                                type="date"
+                                                id="t_to"
+                                                class="form-control">
+                                        </div>
+                                    </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-
-                                        <label>
-                                            <span class="ti-credit-card"></span>
-                                            Bank
-                                        </label>
-
-                                        <select class="form-control" id="bank">
-
-                                            <option value="">All Banks</option>
-
-                                            <?php foreach ($bank as $b) { ?>
-
-                                                <option value="<?php echo $b->bank_id; ?>">
-                                                    <?php echo $b->bank_name; ?>
-                                                </option>
-
-                                            <?php } ?>
-
-                                        </select>
-
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>CV Date From</label>
+                                            <input
+                                                type="date"
+                                                id="cv_from"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>CV Date To</label>
+                                            <input
+                                                type="date"
+                                                id="cv_to"
+                                                class="form-control">
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-
-                                        <label>
-                                            <span class="ti-close"></span>
-                                            Cancelled
-                                        </label>
-
-                                        <select class="form-control" id="cancelled">
-
-                                            <option value="">All</option>
-                                            <option value="0">Active Only</option>
-                                            <option value="1">Cancelled Only</option>
-
-                                        </select>
-
+                                <!-- ROW 3 -->
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>CV No. From</label>
+                                            <input
+                                                type="text"
+                                                id="cv_no_from"
+                                                class="form-control"
+                                                placeholder="Starting CV No">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>CV No. To</label>
+                                            <input
+                                                type="text"
+                                                id="cv_no_to"
+                                                class="form-control"
+                                                placeholder="Ending CV No">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>&nbsp;</label>
+                                        <div class="text-right">
+                                            <button
+                                                id="btnFilter"
+                                                class="btn btn-info btn-fill">
+                                                <span class="ti-search"></span>
+                                                Apply Filters
+                                            </button>
+                                            <button
+                                                id="btnClear"
+                                                class="btn btn-default btn-fill">
+                                                <span class="ti-reload"></span>
+                                                Reset
+                                            </button>
+                                            <button
+                                                id="btnExport"
+                                                class="btn btn-success btn-fill">
+                                                <span class="ti-download"></span>
+                                                Export Filtered
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
-
-                            <!-- ROW 2 -->
-
-                            <div class="row">
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-
-                                        <label>Transaction Date From</label>
-
-                                        <input
-                                            type="date"
-                                            id="t_from"
-                                            class="form-control">
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-
-                                        <label>Transaction Date To</label>
-
-                                        <input
-                                            type="date"
-                                            id="t_to"
-                                            class="form-control">
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-
-                                        <label>CV Date From</label>
-
-                                        <input
-                                            type="date"
-                                            id="cv_from"
-                                            class="form-control">
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-
-                                        <label>CV Date To</label>
-
-                                        <input
-                                            type="date"
-                                            id="cv_to"
-                                            class="form-control">
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <!-- ROW 3 -->
-
-                            <div class="row">
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-
-                                        <label>CV No. From</label>
-
-                                        <input
-                                            type="text"
-                                            id="cv_no_from"
-                                            class="form-control"
-                                            placeholder="Starting CV No">
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-
-                                        <label>CV No. To</label>
-
-                                        <input
-                                            type="text"
-                                            id="cv_no_to"
-                                            class="form-control"
-                                            placeholder="Ending CV No">
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-6">
-
-                                    <label>&nbsp;</label>
-
-                                    <div class="text-right">
-
-                                        <button
-                                            id="btnFilter"
-                                            class="btn btn-info btn-fill">
-
-                                            <span class="ti-search"></span>
-
-                                            Apply Filters
-
-                                        </button>
-
-                                        <button
-                                            id="btnClear"
-                                            class="btn btn-default btn-fill">
-
-                                            <span class="ti-reload"></span>
-
-                                            Reset
-
-                                        </button>
-
-                                        <button
-                                            id="btnExport"
-                                            class="btn btn-success btn-fill">
-
-                                            <span class="ti-download"></span>
-
-                                            Export Filtered
-
-                                        </button>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
                         </div>
                     </div>
 
@@ -337,114 +255,68 @@
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.js"></script>
 <script>
     $(document).ready(function() {
-        var table = $('#reportTable').DataTable({
-            processing: true,
-            serverSide: true,
-            pageLength: 15,
-            ordering: true,
-            searching: true,
-            ajax: {
-                url: "<?php echo base_url(); ?>index.php/masterfile/report_list_ajax",
-                type: "POST",
-                data: function(d) {
-                    d.location_id = $("#location").val();
-                    d.payee = $("#payee").val();
-                    d.t_from = $("#t_from").val();
-                    d.t_to = $("#t_to").val();
-                    d.cv_from = $("#cv_from").val();
-                    d.cv_to = $("#cv_to").val();
-                    d.cv_no_from = $("#cv_no_from").val();
-                    d.cv_no_to = $("#cv_no_to").val();
-                    d.bank = $("#bank").val();
-                    d.cancelled = $("#cancelled").val();
-                }
-            },
-            order: [
-                [0, 'desc']
-            ]
-        });
-        $('#btnFilter').click(function(){
 
-            table.ajax.reload();
-
-        });
-
-        $('#btnClear').click(function(){
-
-            $('#payee').val('');
-
-            $('#bank').val('');
-
-            $('#cancelled').val('');
-
-            $('#t_from').val('');
-            $('#t_to').val('');
-
-            $('#cv_from').val('');
-            $('#cv_to').val('');
-
-            $('#cv_no_from').val('');
-            $('#cv_no_to').val('');
-
-            table.ajax.reload();
-
-        });
-
-        // $('#exportBtn').click(function(){
-
-        //     var url =
-        //     "<?php echo base_url();?>index.php/masterfile/export_cv?"
-        //     + $.param({
-
-        //         location_id: $('#location').val(),
-
-        //         payee: $('#payee').val(),
-
-        //         t_from: $('#t_from').val(),
-        //         t_to: $('#t_to').val(),
-
-        //         cv_from: $('#cv_from').val(),
-        //         cv_to: $('#cv_to').val(),
-
-        //         cv_no_from: $('#cv_no_from').val(),
-        //         cv_no_to: $('#cv_no_to').val(),
-
-        //         bank: $('#bank').val(),
-
-        //         cancelled: $('#cancelled').val()
-
-        //     });
-
-        //     window.location = url;
-
-        // });
-        $('#btnExport').click(function(){
-
-            var url = "<?php echo base_url();?>index.php/masterfile/export_cv?"
-                + $.param({
-
-                    location_id: $('#location').val(),
-
-                    payee: $('#payee').val(),
-
-                    t_from: $('#t_from').val(),
-                    t_to: $('#t_to').val(),
-
-                    cv_from: $('#cv_from').val(),
-                    cv_to: $('#cv_to').val(),
-
-                    cv_no_from: $('#cv_no_from').val(),
-                    cv_no_to: $('#cv_no_to').val(),
-
-                    bank: $('#bank').val(),
-
-                    cancelled: $('#cancelled').val()
-
-                });
-
-            window.location = url;
-
-        });
-
+    var table = $('#reportTable').DataTable({
+        processing: true,
+        serverSide: true,
+        pageLength: 15,
+        ordering: true,
+        searching: true,
+        ajax: {
+            url: "<?php echo base_url(); ?>index.php/masterfile/report_list_ajax",
+            type: "POST",
+            data: function(d) {
+                d.location_id = $('#location').val();
+                d.payee = $('#payee').val();
+                d.bank = $('#bank').val();
+                d.cancelled = $('#cancelled').val();
+                d.t_from = $('#t_from').val();
+                d.t_to = $('#t_to').val();
+                d.cv_from = $('#cv_from').val();
+                d.cv_to = $('#cv_to').val();
+                d.cv_no_from = $('#cv_no_from').val();
+                d.cv_no_to = $('#cv_no_to').val();
+            }
+        },
+        order: [[0, 'desc']]
     });
+
+    // Location changed
+    $('#location').on('change', function () {
+
+        // Clear filters if you want
+        $('#payee').val('');
+        $('#bank').val('');
+        $('#cancelled').val('');
+        $('#t_from').val('');
+        $('#t_to').val('');
+        $('#cv_from').val('');
+        $('#cv_to').val('');
+        $('#cv_no_from').val('');
+        $('#cv_no_to').val('');
+
+        // Reload DataTable using the new location
+        table.ajax.reload();
+    });
+
+    $('#btnFilter').click(function () {
+        table.ajax.reload();
+    });
+
+    $('#btnClear').click(function () {
+
+        $('#payee').val('');
+        $('#bank').val('');
+        $('#cancelled').val('');
+        $('#t_from').val('');
+        $('#t_to').val('');
+        $('#cv_from').val('');
+        $('#cv_to').val('');
+        $('#cv_no_from').val('');
+        $('#cv_no_to').val('');
+
+        table.ajax.reload();
+    });
+
+});
 </script>

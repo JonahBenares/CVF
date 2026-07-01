@@ -1183,6 +1183,12 @@ class Masterfile extends CI_Controller {
             "location_id='$location_id' AND additional='1' AND cancelled='0'"
         );
 
+        $data['suppliers'] = $this->super_model->select_all_order_by(
+            'supplier',
+            'supplier_name',
+            'ASC'
+        );
+
         // Remove the big foreach()
         $this->load->view('template/header');
         $this->load->view('template/navbar');
@@ -1192,6 +1198,13 @@ class Masterfile extends CI_Controller {
 
     public function encoded_list_ajax()
     {
+        $date_from = $this->input->post('date_from');
+        $date_to   = $this->input->post('date_to');
+        $year      = $this->input->post('year');
+        $cv_no     = $this->input->post('cv_no');
+        $encoded   = $this->input->post('encoded');
+        $payee     = $this->input->post('payee');
+
         $location_id = $this->input->post('location_id');
 
         $draw   = $this->input->post('draw');
@@ -1202,13 +1215,38 @@ class Masterfile extends CI_Controller {
 
         $where = "cv.cancelled='0' AND cv.location_id='$location_id'";
 
-        if($search!=""){
-            $where .= " AND (
-                cv.cv_no LIKE '%".$search."%'
-                OR s.supplier_name LIKE '%".$search."%'
-            )";
+        if(!empty($date_from)){
+            $where .= " AND cv.cv_date >= '$date_from'";
         }
 
+        if(!empty($date_to)){
+            $where .= " AND cv.cv_date <= '$date_to'";
+        }
+
+        if(!empty($year)){
+            $where .= " AND YEAR(cv.cv_date) = '$year'";
+        }
+
+        if(!empty($cv_no)){
+            $where .= " AND cv.cv_no LIKE '%".$this->db->escape_like_str($cv_no)."%'";
+        }
+
+        if($encoded !== ""){
+            $where .= " AND cv.encoded = '$encoded'";
+        }
+
+        if(!empty($payee)){
+            $where .= " AND cv.payee = '$payee'";
+        }
+
+        if($search!=""){
+            $search = $this->db->escape_like_str($search);
+
+            $where .= " AND (
+                cv.cv_no LIKE '%$search%'
+                OR s.supplier_name LIKE '%$search%'
+            )";
+        }
         $sql = "
             SELECT
                 cv.cv_id,
@@ -1220,12 +1258,12 @@ class Masterfile extends CI_Controller {
                 l.location_name
             FROM check_voucher cv
             LEFT JOIN supplier s
-                ON s.supplier_id=cv.payee
+                ON s.supplier_id = cv.payee
             LEFT JOIN location l
-                ON l.location_id=cv.location_id
+                ON l.location_id = cv.location_id
             WHERE $where
             ORDER BY cv.cv_date DESC
-            LIMIT $start,$length
+            LIMIT $start, $length
         ";
 
         $query = $this->db->query($sql)->result();
@@ -1234,7 +1272,7 @@ class Masterfile extends CI_Controller {
             SELECT COUNT(*) total
             FROM check_voucher cv
             LEFT JOIN supplier s
-                ON s.supplier_id=cv.payee
+                ON s.supplier_id = cv.payee
             WHERE $where
         ")->row()->total;
 
@@ -1249,6 +1287,7 @@ class Masterfile extends CI_Controller {
             $data[] = array(
                 date('m/d/Y',strtotime($row->cv_date)),
                 $row->cv_no,
+                $row->supplier_name,
                 $status
             );
         }
